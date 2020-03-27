@@ -19,25 +19,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // collect value of input field
     $name = $_POST['name'];
     $room = $_POST['room'];
-    if (empty($name) || empty($room)) {
-        echo "Name is empty";
-    } else {
-        echo $name;
-    }
 
-    include('connect.php');
+    include('callAPI.php');
 
-    $eintrag = "INSERT INTO aktivieren
-			(email, passwort, vorname, nachname, sprache, newsletter)
-			
-			
-			
-			
-			
-	VALUES
-	('$email', '$pw', '$vorname', '$nachname', '$sprache', '$newsletter')";
-
-	$eintragen = mysql_query($eintrag);
+    $make_call = callAPI('POST', 'https://studentethz.ch/api/?action=create_player&p_name=', json_encode($name));
+	$response = json_decode($make_call, true);
+	$errors   = $response['response']['errors'];
+	$data     = $response['response']['data'][0];
 }
 ?>
 
