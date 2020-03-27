@@ -40,9 +40,18 @@ class Player {
 }
 
 class Card{
-  constructor(suit, value){
-    this.suit = suit
-    this.value = value
+  cardFiles = [
+   "../images/b6","../images/b7","../images/b8","../images/b9","../images/b0",
+   "../images/b1","../images/b2","../images/b3","../images/b4",
+   "../images/e6","../images/e7","../images/e8","../images/e9","../images/e0",
+   "../images/e1","../images/e2","../images/e3","../images/e4",
+   "../images/r6","../images/r7","../images/r8","../images/r9","../images/r0",
+   "../images/r1","../images/r2","../images/r3","../images/r4",
+   "../images/s6","../images/s7","../images/s8","../images/s9","../images/s0",
+   "../images/s1","../images/s2","../images/s3","../images/s4"
+  ]
+  constructor(index){
+    this.index = index
     this.x = 0
     this.y = 0
     this.width = 100
@@ -51,6 +60,8 @@ class Card{
     this.fillColor='#fff'
     this.fontColor='#000'
     this.borderSize=1
+    this.image = new Image();
+    this.image.src = cardFiles[index];
   }
 
   draw(x,y){
@@ -58,14 +69,8 @@ class Card{
     this.y=y
     var c = document.getElementById("gameField");
     var ctx = c.getContext("2d");
-    ctx.fillStyle=this.borderColor;
-    ctx.fillRect(x,y,this.width, this.height);
-    ctx.fillStyle=this.fillColor;
-    ctx.fillRect(x+this.borderSize,y+this.borderSize,this.width-2*this.borderSize, this.height-2*this.borderSize);
-    ctx.fillStyle=this.fontColor;
-    ctx.font = this.height/4+"px Arial";
-    ctx.fillText(this.toString(), x, y+this.height/2);
-  }
+    ctx.drawImage(this.image,x,y)
+    }
 
   isClicked(x,y) {
     console.log(x,y,this.x, this.y, this.width,this.height)
