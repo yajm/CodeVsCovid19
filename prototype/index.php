@@ -1,6 +1,6 @@
 <html>
 <body>
-	<form action="https://www.studentethz.ch/game.php" method="POST">
+	<form action="" method="POST">
   <div>
     <label for="room">Your Room</label>
     <input name="room" id="room" value="">
@@ -10,24 +10,27 @@
     <input name="name" id="name" value="">
   </div>
   <div>
-    <button>Start Game</button>
+    <!--<button>Start Game</button>-->
+    <input type="submit" value="Start Game " name="submit">
   </div>
 </form>
 
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // collect value of input field
+if(isset($_POST['submit'])) {
     $name = $_POST['name'];
     $room = $_POST['room'];
 
-    include('callAPI.php');
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_COOKIEFILE, "/tmp/CoronaJass");
+    curl_setopt($ch, CURLOPT_URL, "http://studentethz.ch/api/?action=create_player&p_name=".$name);
+    $output = curl_exec($ch);
+    curl_setopt($ch, CURLOPT_URL, "http://studentethz.ch/api/?action=join_game&room_name=".$room);
+    $game_joint = curl_exec($ch);
+    curl_close($ch);
 
-    $make_call = callAPI('POST', 'https://studentethz.ch/api/?action=create_player&p_name=', json_encode($name));
-	$response = json_decode($make_call, true);
-	$errors   = $response['response']['errors'];
-	$data     = $response['response']['data'][0];
+    header('Location: game.php');
+    exit();
 }
 ?>
-
 </body>
 </html>
