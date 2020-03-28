@@ -132,8 +132,8 @@
 						$all_played=TRUE;
 						$res["lastcards"]=[0,0,0,0];
 						for($i = 0; $i < 4; $i ++) {
-							$last_card = $GLOBALS["db"]->query("SELECT last_card FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0];
-							$res["lastcards"]=$last_card;
+							$last_card = $GLOBALS["db"]->query("SELECT last_card FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["last_card"];
+							$res["lastcards"][$i]=$last_card;
 							if($last_card == null){
 								$all_played=FALSE;
 							}
@@ -178,9 +178,24 @@
 						$turn = $GLOBALS["db"]->query("SELECT turn FROM game WHERE id=?", $_SESSION["game"]["id"])[0]["turn"];
 						$res["player_id"] = $player_id;
 						$res["turn"] = $turn;
+
+						$all_played=TRUE;
+						$res["lastcards"]=[0,0,0,0];
+						for($i = 0; $i < 4; $i ++) {
+							$last_card = $GLOBALS["db"]->query("SELECT last_card FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["last_card"];
+							$res["lastcards"][i]=$last_card;
+							if($last_card == null){
+								$all_played=FALSE;
+							}
+						}
+
 						if($player_id!=$turn){
 							$res["error"] = "624";
 							$res["errorstr"] = "It's not you'r turn!";
+						}
+						else if($all_played){
+							$res["error"] = "625";
+							$res["errorstr"] = "Someone has to claim the cards first";
 						}
 						else{
 
