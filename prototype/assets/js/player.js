@@ -1,25 +1,65 @@
+$.ajaxSetup({
+  xhrFields: {
+    withCredentials: true
+  }
+});
+
+
+cardFiles = [
+  "assets/images/b6.jpg",
+  "assets/images/b7.jpg",
+  "assets/images/b8.jpg",
+  "assets/images/b9.jpg",
+  "assets/images/b0.jpg",
+  "assets/images/b1.jpg",
+  "assets/images/b2.jpg",
+  "assets/images/b3.jpg",
+  "assets/images/b4.jpg",
+  "assets/images/e6.jpg",
+  "assets/images/e7.jpg",
+  "assets/images/e8.jpg",
+  "assets/images/e9.jpg",
+  "assets/images/e0.jpg",
+  "assets/images/e1.jpg",
+  "assets/images/e2.jpg",
+  "assets/images/e3.jpg",
+  "assets/images/e4.jpg",
+  "assets/images/r6.jpg",
+  "assets/images/r7.jpg",
+  "assets/images/r8.jpg",
+  "assets/images/r9.jpg",
+  "assets/images/r0.jpg",
+  "assets/images/r1.jpg",
+  "assets/images/r2.jpg",
+  "assets/images/r3.jpg",
+  "assets/images/r4.jpg",
+  "assets/images/s6.jpg",
+  "assets/images/s7.jpg",
+  "assets/images/s8.jpg",
+  "assets/images/s9.jpg",
+  "assets/images/s0.jpg",
+  "assets/images/s1.jpg",
+  "assets/images/s2.jpg",
+  "assets/images/s3.jpg",
+  "assets/images/s4.jpg"
+]
+
+cardImages = []
+
+for(var i = 0; i < cardFiles.length; i++){
+  var image = new Image()
+  image.src = cardFiles[i]
+  cardImages.push(image)
+}
+
+
 class Player {
-  constructor(table, playerIndex) {
-
-    var player = this
-    this.cards = []
-
-    $.getJSON("http://studentethz.ch/api/?action=my_cards",
-       function(data) {
-         if(data.error == -1){
-           console.log(data.cards)
-           for(var i = 0; i < data.cards.length; i++){
-             player.cards.push(new Card(data.cards[i]))
-           }
-           player.draw()
-         }
-    });
-
+  constructor(game) {
+    this.game = game
+    this.id = null
+    this.cards = null
     this.width=0.4
     this.relYPos=0.8
-    this.table=table
-    this.playerIndex = playerIndex
-
   }
 
   displayCards() {
@@ -54,26 +94,10 @@ class Player {
     for (var i = 0; i < this.cards.length; i++){
       var card = this.cards[i]
       if(this.cards[i].isClicked(x,y)){
-        if(this.table.addCard(this.playerIndex, this.cards[i])){
-          this.table.card1 = this.cards[i]
-
-          $.getJSON("http://studentethz.ch/api/?action=play_card&card_num="+this.cards[i],
-             function(data) {
-               console.log("Play Card:",data)
-          });
-
-          this.cards.splice(i,1)
-          break
+        return i
         }
       }
-    }
-
-    if(this.table.isClicked(x,y) && this.table.full){
-      this.table.claim(this.playerIndex)
-    }
-
-    this.table.draw()
-    this.draw()
+    return null
   }
 
 }
@@ -154,62 +178,19 @@ class Table {
 }
 
 class Card{
-  cardFiles = [
-    "assets/images/b6.jpg",
-    "assets/images/b7.jpg",
-    "assets/images/b8.jpg",
-    "assets/images/b9.jpg",
-    "assets/images/b0.jpg",
-    "assets/images/b1.jpg",
-    "assets/images/b2.jpg",
-    "assets/images/b3.jpg",
-    "assets/images/b4.jpg",
-    "assets/images/e6.jpg",
-    "assets/images/e7.jpg",
-    "assets/images/e8.jpg",
-    "assets/images/e9.jpg",
-    "assets/images/e0.jpg",
-    "assets/images/e1.jpg",
-    "assets/images/e2.jpg",
-    "assets/images/e3.jpg",
-    "assets/images/e4.jpg",
-    "assets/images/r6.jpg",
-    "assets/images/r7.jpg",
-    "assets/images/r8.jpg",
-    "assets/images/r9.jpg",
-    "assets/images/r0.jpg",
-    "assets/images/r1.jpg",
-    "assets/images/r2.jpg",
-    "assets/images/r3.jpg",
-    "assets/images/r4.jpg",
-    "assets/images/s6.jpg",
-    "assets/images/s7.jpg",
-    "assets/images/s8.jpg",
-    "assets/images/s9.jpg",
-    "assets/images/s0.jpg",
-    "assets/images/s1.jpg",
-    "assets/images/s2.jpg",
-    "assets/images/s3.jpg",
-    "assets/images/s4.jpg"
-  ]
+
   constructor(index){
     this.index = index
     this.x = 0
     this.y = 0
     this.borderSize=1
-    this.image = new Image();
 
     this.width = 100
     this.height = 160
 
+    this.image = cardImages[index]
     this.loaded = false
 
-    this.image.card = this
-    this.image.src = this.cardFiles[index]
-    this.image.onload = function() {
-      this.card.draw(this.card.x, this.card.y)
-      this.card.loaded=true
-    }
   }
 
 
@@ -227,96 +208,97 @@ class Card{
 
 }
 
-Player.prototype.toString = function playerToString() {
-  out = ""
-  for (var i = 0; i < cards.length; i++){
-    out += this.cards[i].toString() + ", "
-  }
-  return out
-}
-
-
-Card.prototype.toString = function cardToString() {
-  return this.suit + this.value
-}
-
-function makeid(length) {
-   var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-   var charactersLength = characters.length;
-   for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-   }
-   return result;
-}
-
 class Game{
   constructor(){
     this.table = new Table(0)
-    this.player = new Player(this.table,0)
+    this.player = new Player(this,0)
     this.room_name=null
     this.id=null
-    this.player1=null
-    this.player2=null
-    this.player3=null
-    this.player4=null
-    this.turn=0
+    this.player_ids=null
+    this.turn=3
   }
 
-  update(){
-    game = this
-    $.getJSON("http://studentethz.ch/api/?action=game_state",
-        function(data) {
-          if(error==-1){
-            for(var i = 0; i < 4; i++){
-              if(game.table.cards[i].index != data.players[i].last_card){
-                game.table.cards[i] = new Card(data.players[i].last_card)
-              }
-            }
-            game.turn = data.turn
-            game.room_name = data.room_name
-            game.id=data.id
-            game.player1=data.player1
-            game.player2=data.player2
-            game.player3=data.player3
-            game.player4=data.player4
+  updatePlayerCards(cards){
+    this.player.cards = []
+    for(var i = 0; i < cards.length; i++){
+      this.player.cards.push(new Card(cards[i]-1))
+    }
+    this.player.draw()
+  }
+
+  clicked(x,y) {
+    console.log(this.player_ids, this.turn, this.player.id, this.player.cards)
+    if(true||this.player_ids != null && this.player_ids[this.turn] == this.player.id){
+      console.log("forward")
+      var cardIndex = this.player.clicked(x,y)
+      if(cardIndex != null){
+        $.getJSON("http://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
+          function (data) {
+            console.log("Play",data)
           }
-     });
+        )
+        this.table.cards[this.turn] = this.player.cards[cardIndex]
+        this.player.cards.splice(cardIndex,1)
+        this.player.draw()
+      }
+    }
   }
 
 }
 
+function doPolling(game){
+  $.getJSON("http://studentethz.ch/api/?action=game_state",
+      function(data) {
+        console.log(data)
+        if(data.error==-1){
+          for(var i = 0; i < 4; i++){
+            if(game.table.cards[i] == null || game.table.cards[i].index != data.players[i].last_card){
+              game.table.cards[i] = new Card(Number(data.players[i].last_card))
+              //game.table.draw()
+            }
+          }
+          //game.turn = data.game.turn
+          game.room_name = data.game.room_name
+          game.id=data.game.id
+
+          game.player_ids = [
+            data.players[0].id,
+            data.players[1].id,
+            data.players[2].id,
+            data.players[3].id
+          ]
+
+          game.player.id = Number(data.protagonist)
+          game.updatePlayerCards(data.players[game.player_ids.indexOf(game.player.id)].cards)
+        }
+        setTimeout(function(){doPolling(game)},500);
+   });
+}
+
+
+function setup_dummy(){
+  var room_name = makeid(10)
+  $.get("http://studentethz.ch/api/?action=create_player&p_name=Peter")
+  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+  $.get("http://studentethz.ch/api/?action=create_player&p_name=Hans")
+  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+  $.get("http://studentethz.ch/api/?action=create_player&p_name=Frida")
+  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+  $.get("http://studentethz.ch/api/?action=create_player&p_name=Toni")
+  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+
+  $.getJSON("http://studentethz.ch/api/?action=game_state",
+      function(data) {
+        console.log("Game State",data)
+   });
+
+}
+
+
 function main(){
-    var room_name = makeid(10)
 
-    $.ajaxSetup({
-      xhrFields: {
-        withCredentials: true
-      }
-    });
-
-    $.get("http://studentethz.ch/api/?action=create_player&p_name=Peter")
-    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-    $.get("http://studentethz.ch/api/?action=create_player&p_name=Hans")
-    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-    $.get("http://studentethz.ch/api/?action=create_player&p_name=Frida")
-    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-    $.get("http://studentethz.ch/api/?action=create_player&p_name=Toni")
-    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-
-    $.getJSON("http://studentethz.ch/api/?action=game_state",
-        function(data) {
-          console.log("Game State",data)
-     });
-
-    var table = new Table(1)
-    table.addCard(1,new Card(1))
-    table.addCard(2,new Card(2))
-    table.addCard(3,new Card(3))
-
-
-    var player = new Player(table, 0)
-    player.draw()
+    var game = new Game()
+    doPolling(game)
 
     var elem = document.getElementById('gameField'),
         elemLeft = elem.offsetLeft,
@@ -332,7 +314,7 @@ function main(){
 
         var x =(event.clientX-rect.left)*c.width/rect.width,
             y = (event.clientY-rect.top)*c.height/rect.height;
-        player.clicked(x,y)
+        game.clicked(x,y)
     }, false);
 
 }
