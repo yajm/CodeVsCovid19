@@ -1,6 +1,21 @@
 class Player {
-  constructor(cards, table, playerIndex) {
-    this.cards = cards
+  constructor(table, playerIndex) {
+
+    var player = this
+
+    this.cards = [new Card(4),new Card(5),new Card(6)]
+
+    $.getJSON("http://studentethz.ch/api/?action=my_cards",
+       function(data) {
+         if(data.error == -1){
+           for(var i = 0; i < data.cards.length; i++){
+             player.cards.append(new Card(data.cards[i]-1))
+           }
+         }
+    });
+
+    console.log(this)
+
     this.width=0.4
     this.relYPos=0.8
     this.table=table
@@ -17,19 +32,19 @@ class Player {
 
     var width = this.width * c.width
     var posy = c.height * this.relYPos
-    var spacing = width/cards.length
+    var spacing = width/this.cards.length
 
     var left = (c.width - width) / 2
 
-    if(cards.length > 0){
-      context.clearRect(left,posy,(cards.length)*spacing+cards[0].width,cards[0].height)
+    if(this.cards.length > 0){
+      context.clearRect(left,posy,(this.cards.length)*spacing+this.cards[0].width,this.cards[0].height)
     }
     else{
       context.clearRect(left,posy,500,500)
     }
 
-    for (var i = 0; i < cards.length; i++){
-      var card = cards[i]
+    for (var i = 0; i < this.cards.length; i++){
+      var card = this.cards[i]
       var posx = left + i*spacing
       card.draw(posx,posy,1)
     }
@@ -42,10 +57,15 @@ class Player {
         if(this.table.addCard(this.playerIndex, this.cards[i])){
           this.table.card1 = this.cards[i]
           this.cards.splice(i,1)
-          break          
+          break
         }
       }
     }
+
+    if(this.table.isClicked(x,y)){
+      this.table.claim(this.playerIndex)
+    }
+
     this.table.draw()
     this.draw()
   }
@@ -60,13 +80,38 @@ class Table {
 
     this.currentPlayer = startPlayer
     this.cards = [null, null, null, null]
+    this.full=false
+  }
+
+  claim(playerIndex){
+    this.cards = [null, null, null, null]
+    this.full=false
+    this.currentPlayer=playerIndex
+  }
+
+  isClicked(x,y) {
+    var c = document.getElementById("gameField");
+    var context = c.getContext('2d')
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+    return centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y
   }
 
   addCard(playerIndex, card){
-    if(playerIndex == this.currentPlayer){
+    if(this.full){
+      alert("Klicke auf die gespielten Karten um sie einzusammeln.")
+      return false
+    }
+    else if(playerIndex == this.currentPlayer){
       this.cards[playerIndex] = card
       this.draw()
       this.currentPlayer = (this.currentPlayer+1)%4
+
+      if(this.cards[0] != null && this.cards[1] != null &&
+        this.cards[2] != null && this.cards[3] != null){
+          this.full=true
+        }
       return true
     }
     else{
@@ -82,6 +127,9 @@ class Table {
     var centerX = c.width*this.relXPos
     var centerY = c.height*this.relYPos
     var offset = c.width*this.relSize
+
+    context.clearRect(centerX-offset, centerY-offset,
+                      2*offset+300, 2*offset+300)
 
     if(this.cards[0] != null){
       this.cards[0].draw(centerX, centerY+offset)
@@ -187,24 +235,15 @@ Card.prototype.toString = function cardToString() {
 }
 
 
+var table = new Table(1)
+table.addCard(1,new Card(1))
+table.addCard(2,new Card(2))
+table.addCard(3,new Card(3))
 
-
-
-cards = [
-  new Card(0),
-  new Card(2),
-  new Card(8),
-  new Card(10),
-  new Card(12),
-  new Card(14),
-  new Card(30),
-  new Card(31),
-  new Card(35)
-]
-
-var table = new Table(0)
-var player = new Player(cards, table, 0)
+var player = new Player(table, 0)
 player.draw()
+
+
 
 var elem = document.getElementById('gameField'),
     elemLeft = elem.offsetLeft,
@@ -222,3 +261,16 @@ elem.addEventListener('click', function(event) {
         y = (event.clientY-rect.top)*c.height/rect.height;
     player.clicked(x,y)
 }, false);
+
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+// Credentials akzeptieren
+setCookie("PHPSESSID","rjdjm2fb1b7gjlrfi2293jdcrq",1000)
