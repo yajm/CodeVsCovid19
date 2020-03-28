@@ -49,6 +49,7 @@ cardImages = []
 cardWidth = 175
 cardHeight=250
 
+
 for(var i = 0; i < cardFiles.length; i++){
   var image = new Image()
   image.src = cardFiles[i]
@@ -61,8 +62,10 @@ class Player {
     this.game = game
     this.id = null
     this.cards = null
+
     this.width=0.8
     this.relYPos=0.7
+
   }
 
   displayCards() {
@@ -83,7 +86,9 @@ class Player {
       context.clearRect(left,posy,(this.cards.length)*spacing+this.cards[0].width,this.cards[0].height)
     }
     else{
+
       context.clearRect(left,posy,cardWidth,cardHeight)
+
     }
 
     for (var i = 0; i < this.cards.length; i++){
@@ -109,6 +114,7 @@ class Table {
   constructor(startPlayer){
     this.relXPos = 0.8
     this.relYPos = 0.2
+
     this.relSize = 0.09
 
     this.currentPlayer = startPlayer
@@ -116,6 +122,7 @@ class Table {
     this.names = ["", "", "", ""]
     this.turn=0
     this.protagonist=0
+
     this.full=false
   }
 
@@ -230,6 +237,7 @@ class Card{
     this.width = cardWidth
     this.height = cardHeight
 
+
     this.image = cardImages[index]
     this.loaded = false
 
@@ -321,6 +329,7 @@ function doPolling(game){
             data.players[2].id,
             data.players[3].id
           ]
+
 
           game.table.names = [
             data.players[0].name,
