@@ -255,8 +255,10 @@ function doPolling(game){
             if(data.players[i].last_card!= null){
               game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
             }
-            game.table.draw()
           }
+          console.log("Game Table",game.table)
+          game.table.draw()
+
           //game.turn = data.game.turn
           game.room_name = data.game.room_name
           game.id=data.game.id
