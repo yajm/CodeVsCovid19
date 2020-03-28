@@ -2,7 +2,7 @@ class Player {
   constructor(cards) {
     this.cards = cards
     this.width=0.75
-    this.height=0.75
+    this.height=0.65
   }
 
   displayCards() {
@@ -40,31 +40,69 @@ class Player {
 }
 
 class Card{
-  constructor(suit, value){
-    this.suit = suit
-    this.value = value
+  cardFiles = [
+    "assets/images/b6.jpg",
+    "assets/images/b7.jpg",
+    "assets/images/b8.jpg",
+    "assets/images/b9.jpg",
+    "assets/images/b0.jpg",
+    "assets/images/b1.jpg",
+    "assets/images/b2.jpg",
+    "assets/images/b3.jpg",
+    "assets/images/b4.jpg",
+    "assets/images/e6.jpg",
+    "assets/images/e7.jpg",
+    "assets/images/e8.jpg",
+    "assets/images/e9.jpg",
+    "assets/images/e0.jpg",
+    "assets/images/e1.jpg",
+    "assets/images/e2.jpg",
+    "assets/images/e3.jpg",
+    "assets/images/e4.jpg",
+    "assets/images/r6.jpg",
+    "assets/images/r7.jpg",
+    "assets/images/r8.jpg",
+    "assets/images/r9.jpg",
+    "assets/images/r0.jpg",
+    "assets/images/r1.jpg",
+    "assets/images/r2.jpg",
+    "assets/images/r3.jpg",
+    "assets/images/r4.jpg",
+    "assets/images/s6.jpg",
+    "assets/images/s7.jpg",
+    "assets/images/s8.jpg",
+    "assets/images/s9.jpg",
+    "assets/images/s0.jpg",
+    "assets/images/s1.jpg",
+    "assets/images/s2.jpg",
+    "assets/images/s3.jpg",
+    "assets/images/s4.jpg"
+  ]
+  constructor(index){
+    this.index = index
     this.x = 0
     this.y = 0
-    this.width = 100
-    this.height = 200
     this.borderColor='#000'
     this.fillColor='#fff'
     this.fontColor='#000'
     this.borderSize=1
+    this.image = new Image();
+
+    this.width = 200
+    this.height = 400
+
+    this.image.card = this
+    this.image.src = this.cardFiles[index]
+    this.image.onload = function() {this.card.draw(this.card.x, this.card.y)}
   }
+
 
   draw(x,y){
     this.x=x
     this.y=y
     var c = document.getElementById("gameField");
     var ctx = c.getContext("2d");
-    ctx.fillStyle=this.borderColor;
-    ctx.fillRect(x,y,this.width, this.height);
-    ctx.fillStyle=this.fillColor;
-    ctx.fillRect(x+this.borderSize,y+this.borderSize,this.width-2*this.borderSize, this.height-2*this.borderSize);
-    ctx.fillStyle=this.fontColor;
-    ctx.font = this.height/4+"px Arial";
-    ctx.fillText(this.toString(), x, y+this.height/2);
+    ctx.drawImage(this.image,x,y)
   }
 
   isClicked(x,y) {
@@ -88,19 +126,20 @@ Card.prototype.toString = function cardToString() {
 }
 
 cards = [
-  new Card("🔔","6"),
-  new Card("🔔","7"),
-  new Card("🌰","8"),
-  new Card("🌰","9"),
-  new Card("🌰","10"),
-  new Card("🛡️","U"),
-  new Card("💮","K"),
-  new Card("🛡️","O"),
-  new Card("💮","A")
+  new Card(0),
+  new Card(2),
+  new Card(8),
+  new Card(10),
+  new Card(12),
+  new Card(14),
+  new Card(30),
+  new Card(31),
+  new Card(35)
 ]
 
 
 var player = new Player(cards)
+var allLoaded = false
 player.draw()
 
 var elem = document.getElementById('gameField'),
