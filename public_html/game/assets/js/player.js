@@ -253,7 +253,7 @@ class Game{
     console.log(this.player_ids, this.turn, this.player.id, this.player.cards)
     var cardIndex = this.player.clicked(x,y)
     if(cardIndex != null){
-      $.getJSON("https://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
+      $.getJSON("../api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
         function (data) {
           console.log("Play",data)
         }
@@ -266,7 +266,7 @@ class Game{
     console.log("claimning")
 
     if(this.table.isClicked(x,y)){
-      $.getJSON("https://studentethz.ch/api/?action=claim",
+      $.getJSON("../api/?action=claim",
         function (data) {
           console.log("Claimed",data)
         }
@@ -276,7 +276,7 @@ class Game{
 }
 
 function doPolling(game){
-  $.getJSON("https://studentethz.ch/api/?action=game_state",
+  $.getJSON("../api/?action=game_state",
       function(data) {
         console.log(data)
         if(data.error==-1){
