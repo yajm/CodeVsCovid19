@@ -1,8 +1,10 @@
 class Player {
-  constructor(cards) {
+  constructor(cards, table, playerIndex) {
     this.cards = cards
     this.width=0.4
     this.relYPos=0.8
+    this.table=table
+    this.playerIndex = playerIndex
   }
 
   displayCards() {
@@ -37,25 +39,40 @@ class Player {
     for (var i = 0; i < this.cards.length; i++){
       var card = this.cards[i]
       if(this.cards[i].isClicked(x,y)){
-        this.cards.splice(i,1)
-        break
+        if(this.table.addCard(this.playerIndex, this.cards[i])){
+          this.table.card1 = this.cards[i]
+          this.cards.splice(i,1)
+          break          
+        }
       }
     }
+    this.table.draw()
     this.draw()
   }
 
 }
 
 class Table {
-  constructor(){
-    this.relXPos = 0.5
-    this.relYPos = 0.5
-    this.relSize = 0.08
+  constructor(startPlayer){
+    this.relXPos = 0.8
+    this.relYPos = 0.2
+    this.relSize = 0.06
 
-    this.card1 = null
-    this.card2 = null
-    this.card3 = null
-    this.card4 = null
+    this.currentPlayer = startPlayer
+    this.cards = [null, null, null, null]
+  }
+
+  addCard(playerIndex, card){
+    if(playerIndex == this.currentPlayer){
+      this.cards[playerIndex] = card
+      this.draw()
+      this.currentPlayer = (this.currentPlayer+1)%4
+      return true
+    }
+    else{
+      alert("Du bist nicht am Zug!")
+      return false
+    }
   }
 
   draw(){
@@ -66,17 +83,17 @@ class Table {
     var centerY = c.height*this.relYPos
     var offset = c.width*this.relSize
 
-    if(this.card1 != null){
-      this.card1.draw(centerX, centerY+offset)
+    if(this.cards[0] != null){
+      this.cards[0].draw(centerX, centerY+offset)
     }
-    if(this.card2 != null){
-      this.card2.draw(centerX-offset, centerY)
+    if(this.cards[1] != null){
+      this.cards[1].draw(centerX-offset, centerY)
     }
-    if(this.card3 != null){
-      this.card3.draw(centerX, centerY-offset)
+    if(this.cards[2] != null){
+      this.cards[2].draw(centerX, centerY-offset)
     }
-    if(this.card4 != null){
-      this.card4.draw(centerX+offset, centerY)
+    if(this.cards[3] != null){
+      this.cards[3].draw(centerX+offset, centerY)
     }
   }
 
@@ -171,17 +188,6 @@ Card.prototype.toString = function cardToString() {
 
 
 
-var table = new Table()
-
-table.card1 = new Card(0)
-table.card2 = new Card(1)
-table.card3 = new Card(2)
-table.card4 = new Card(3)
-
-table.draw()
-
-var c = document.getElementById("gameField");
-var ctx = c.getContext("2d");
 
 
 cards = [
@@ -196,7 +202,8 @@ cards = [
   new Card(35)
 ]
 
-var player = new Player(cards)
+var table = new Table(0)
+var player = new Player(cards, table, 0)
 player.draw()
 
 var elem = document.getElementById('gameField'),
