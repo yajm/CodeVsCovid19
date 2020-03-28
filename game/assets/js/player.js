@@ -46,8 +46,8 @@ cardFiles = [
 
 cardImages = []
 
-cardWidth = 100
-cardHeight=160
+cardWidth = 175
+cardHeight=250
 
 for(var i = 0; i < cardFiles.length; i++){
   var image = new Image()
@@ -61,8 +61,8 @@ class Player {
     this.game = game
     this.id = null
     this.cards = null
-    this.width=0.4
-    this.relYPos=0.8
+    this.width=0.8
+    this.relYPos=0.7
   }
 
   displayCards() {
@@ -83,7 +83,7 @@ class Player {
       context.clearRect(left,posy,(this.cards.length)*spacing+this.cards[0].width,this.cards[0].height)
     }
     else{
-      context.clearRect(left,posy,500,500)
+      context.clearRect(left,posy,cardWidth,cardHeight)
     }
 
     for (var i = 0; i < this.cards.length; i++){
@@ -109,11 +109,13 @@ class Table {
   constructor(startPlayer){
     this.relXPos = 0.8
     this.relYPos = 0.2
-    this.relSize = 0.06
+    this.relSize = 0.09
 
     this.currentPlayer = startPlayer
     this.cards = [null, null, null, null]
+    this.names = ["", "", "", ""]
     this.turn=0
+    this.protagonist=0
     this.full=false
   }
 
@@ -163,40 +165,58 @@ class Table {
     var offset = c.width*this.relSize
     var outlineWidth=4
 
+    var textOffset=10
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
     context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
                       2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth)
-    context.fillStyle = "#FF0000";
-    if(this.turn == 0){
-        context.fillRect(centerX-outlineWidth,centerY+offset-outlineWidth,
-                          cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
-    }
-    else if(this.turn == 1){
-      context.fillRect(centerX-outlineWidth-offset,centerY-outlineWidth,
-                        cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
-    }
-    else if(this.turn == 2){
-      context.fillRect(centerX-outlineWidth,centerY-offset-outlineWidth,
-                        cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
-    }
-    else if(this.turn == 3){
-      context.fillRect(centerX-outlineWidth+offset,centerY-outlineWidth,
-                        cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
-    }
 
-    if(this.cards[0] != null){
-      this.cards[0].draw(centerX, centerY+offset)
-    }
-    if(this.cards[1] != null){
-      this.cards[1].draw(centerX-offset, centerY)
-    }
-    if(this.cards[2] != null){
-      this.cards[2].draw(centerX, centerY-offset)
-    }
-    if(this.cards[3] != null){
-      this.cards[3].draw(centerX+offset, centerY)
+    for(var i = 0; i < 4; i++){
+      if(this.turn == i){
+        if(this.protagonist == i){
+          context.fillStyle = "#FF000040";
+        }
+        else{
+          context.fillStyle = "#FF000020";
+        }
+      }
+      else{
+        if(this.protagonist == i){
+          context.fillStyle = "#00000040";
+        }
+        else{
+          context.fillStyle = "#00000020";
+        }
+      }
+      // Fill card holder
+      context.fillRect(centerX-outlineWidth+offsets[i][0],
+                       centerY-outlineWidth+offsets[i][1],
+                       cardWidth,cardHeight)
+     // Draw Name
+     console.log(this.protagonist, this.protagonist==i)
+     if(this.protagonist == i){
+       context.fillStyle = "#80000080";
+       context.font = "33px Sans Bold";
+     }
+     else{
+       context.fillStyle = "#00000080";
+       context.font = "30px Sans";
+     }
+     context.textBaseline = 'middle';
+     context.textAlign = 'center';
+     context.fillText(this.names[i],centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
+
+     // Draw Card
+     if(this.cards[i] != null){
+       this.cards[i].draw(centerX+offsets[i][0], centerY+offsets[i][1])
+     }
     }
   }
-
 }
 
 class Card{
@@ -207,8 +227,8 @@ class Card{
     this.y = 0
     this.borderSize=1
 
-    this.width = 100
-    this.height = 160
+    this.width = cardWidth
+    this.height = cardHeight
 
     this.image = cardImages[index]
     this.loaded = false
@@ -302,7 +322,16 @@ function doPolling(game){
             data.players[3].id
           ]
 
+          game.table.names = [
+            data.players[0].name,
+            data.players[1].name,
+            data.players[2].name,
+            data.players[3].name
+          ]
+
           game.player.id = Number(data.protagonist)
+          game.table.protagonist = game.player_ids.indexOf(game.player.id)
+
           game.updatePlayerCards(data.players[game.player_ids.indexOf(game.player.id)].cards)
         }
         setTimeout(function(){doPolling(game)},500);
