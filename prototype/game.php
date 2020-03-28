@@ -1,19 +1,30 @@
 <html>
 <head>
-  <title>Corona-Jass</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="n.ethz.ch/~pascscha/assets/css/main.css">
 </head>
+<body widht=100%>
 
-<body class="">
-  <style>
-    iframe { width:100%; height:100%; border:3px groove #f00 }
-    #over { font-size:5em; position:absolute; top:20px; left:20px; z-index:2 color:#ffffff}
+  <style type="text/css">
+    iframe {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+    }
+    canvas {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 2000;
+      height: 1000;
+      z-index: 2;
+    }
   </style>
+  <canvas id="gameField" width="2000" height="1000"></canvas>
   <iframe allow="camera; microphone" src="https://meet.jit.si/Bxwls712aCA91L">
   </iframe>
-  <div id="over">Corona-Jass</div>
-
+  <script src="assets/js/player.js"></script>
 </body>
 </html>
+
