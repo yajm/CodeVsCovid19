@@ -252,10 +252,10 @@ function doPolling(game){
         console.log(data)
         if(data.error==-1){
           for(var i = 0; i < 4; i++){
-            if(game.table.cards[i] == null || game.table.cards[i].index != data.players[i].last_card){
-              game.table.cards[i] = new Card(Number(data.players[i].last_card))
-              //game.table.draw()
+            if(data.players[i].last_card!= null){
+              game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
             }
+            game.table.draw()
           }
           //game.turn = data.game.turn
           game.room_name = data.game.room_name
