@@ -130,9 +130,11 @@
 					else{
 						// Check if everyone has plaid their card
 						$all_played=TRUE;
+						$res["lastcards"]=[0,0,0,0];
 						for($i = 0; $i < 4; $i ++) {
 							$last_card = $GLOBALS["db"]->query("SELECT last_card FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0];
-							if($last_card === null){
+							$res["lastcards"]=$last_card;
+							if($last_card == null){
 								$all_played=FALSE;
 							}
 						}
@@ -141,6 +143,7 @@
 							$res["errorstr"] = "Not everyone has played yet.";
 						}
 						else{
+							$this->refreshGame();
 							// Set all played cards to null
 							for($i = 0; $i < 4; $i ++) {
 								$GLOBALS["db"]->query("UPDATE player SET last_card=null WHERE id=?", $_SESSION["game"]["player".($i + 1)]);
@@ -152,7 +155,7 @@
 								}
 							}
 						}
-						$this->refreshGame();
+
 					}
 					break;
 				case 'play_card':
@@ -164,14 +167,29 @@
 						$res["error"] = "623";
 						$res["errorstr"] = "First join a game before playing a card";
 					}
+					else{
+						$this->refreshGame();
+						$player_id = 0;
+						for($i = 0; $i < 4; $i ++) {
+							if($_SESSION["game"]["player".($i + 1)]==$_SESSION["player"]["id"]){
+								$player_id = $i;
+							}
+						}
+						$turn = $GLOBALS["db"]->query("SELECT turn FROM game WHERE id=?", $_SESSION["game"]["id"])[0]["turn"];
+						$res["player_id"] = $player_id;
+						$res["turn"] = $turn;
+						if($player_id!=$turn){
+							$res["error"] = "624";
+							$res["errorstr"] = "It's not you'r turn!";
+						}
+						else{
 
-					$this->refreshGame();
+							$GLOBALS["db"]->query("DELETE FROM rel_inhand WHERE player_id=? AND card_num=?", $_SESSION["player"]["id"], $_GET["card_num"]);
 
-					$GLOBALS["db"]->query("DELETE FROM rel_inhand WHERE player_id=? AND card_num=?", $_SESSION["player"]["id"], $_GET["card_num"]);
-
-					$GLOBALS["db"]->query("UPDATE player SET last_card=? WHERE id=?", $_GET["card_num"], $_SESSION["player"]["id"]);
-					$GLOBALS["db"]->query("UPDATE game SET turn = (turn + 1) % 4 WHERE id=?", $_SESSION["game"]["id"]);
-
+							$GLOBALS["db"]->query("UPDATE player SET last_card=? WHERE id=?", $_GET["card_num"], $_SESSION["player"]["id"]);
+							$GLOBALS["db"]->query("UPDATE game SET turn = (turn + 1) % 4 WHERE id=?", $_SESSION["game"]["id"]);
+						}
+					}
 					break;
 
 				case 'set_turn':
