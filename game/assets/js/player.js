@@ -228,22 +228,28 @@ class Game{
 
   clicked(x,y) {
     console.log(this.player_ids, this.turn, this.player.id, this.player.cards)
-    if(true||this.player_ids != null && this.player_ids[this.turn] == this.player.id){
-      console.log("forward")
-      var cardIndex = this.player.clicked(x,y)
-      if(cardIndex != null){
-        $.getJSON("https://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
-          function (data) {
-            console.log("Play",data)
-          }
-        )
-        this.table.cards[this.turn] = this.player.cards[cardIndex]
-        this.player.cards.splice(cardIndex,1)
-        this.player.draw()
-      }
+    var cardIndex = this.player.clicked(x,y)
+    if(cardIndex != null){
+      $.getJSON("https://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
+        function (data) {
+          console.log("Play",data)
+        }
+      )
+      this.table.cards[this.turn] = this.player.cards[cardIndex]
+      this.player.cards.splice(cardIndex,1)
+      this.player.draw()
+    }
+
+    console.log("claimning")
+
+    if(this.table.isClicked(x,y)){
+      $.getJSON("https://studentethz.ch/api/?action=claim",
+        function (data) {
+          console.log("Claimed",data)
+        }
+      )
     }
   }
-
 }
 
 function doPolling(game){
@@ -255,8 +261,11 @@ function doPolling(game){
             if(data.players[i].last_card!= null){
               game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
             }
+            else{
+              game.table.cards[i] = null
+            }
           }
-          console.log("Game Table",game.table)
+          //console.log("Game Table",game.table)
           game.table.draw()
 
           //game.turn = data.game.turn
