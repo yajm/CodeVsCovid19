@@ -46,6 +46,9 @@ cardFiles = [
 
 cardImages = []
 
+cardWidth = 100
+cardHeight=160
+
 for(var i = 0; i < cardFiles.length; i++){
   var image = new Image()
   image.src = cardFiles[i]
@@ -110,6 +113,7 @@ class Table {
 
     this.currentPlayer = startPlayer
     this.cards = [null, null, null, null]
+    this.turn=0
     this.full=false
   }
 
@@ -157,9 +161,27 @@ class Table {
     var centerX = c.width*this.relXPos
     var centerY = c.height*this.relYPos
     var offset = c.width*this.relSize
+    var outlineWidth=4
 
-    context.clearRect(centerX-offset, centerY-offset,
-                      2*offset+300, 2*offset+300)
+    context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
+                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth)
+    context.fillStyle = "#FF0000";
+    if(this.turn == 0){
+        context.fillRect(centerX-outlineWidth,centerY+offset-outlineWidth,
+                          cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
+    }
+    else if(this.turn == 1){
+      context.fillRect(centerX-outlineWidth-offset,centerY-outlineWidth,
+                        cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
+    }
+    else if(this.turn == 2){
+      context.fillRect(centerX-outlineWidth,centerY-offset-outlineWidth,
+                        cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
+    }
+    else if(this.turn == 3){
+      context.fillRect(centerX-outlineWidth+offset,centerY-outlineWidth,
+                        cardWidth+2*outlineWidth, cardHeight+2*outlineWidth)
+    }
 
     if(this.cards[0] != null){
       this.cards[0].draw(centerX, centerY+offset)
@@ -269,7 +291,7 @@ function doPolling(game){
           //console.log("Game Table",game.table)
           game.table.draw()
 
-          //game.turn = data.game.turn
+          game.table.turn = data.game.turn
           game.room_name = data.game.room_name
           game.id=data.game.id
 
