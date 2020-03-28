@@ -2,26 +2,24 @@ class Player {
   constructor(table, playerIndex) {
 
     var player = this
-
-    $.ajaxSetup({
-      url: "http://studentethz.ch/api/",
-      xhrFields: {
-        withCredentials: true
-      }
-    });
+    this.cards = []
 
     $.getJSON("http://studentethz.ch/api/?action=my_cards",
        function(data) {
-         console.log("Request",this)
-         console.log("Data",data)
+         if(data.error == -1){
+           console.log(data.cards)
+           for(var i = 0; i < data.cards.length; i++){
+             player.cards.push(new Card(data.cards[i]))
+           }
+           player.draw()
+         }
     });
-
-    this.cards=[]
 
     this.width=0.4
     this.relYPos=0.8
     this.table=table
     this.playerIndex = playerIndex
+
   }
 
   displayCards() {
@@ -242,46 +240,60 @@ Card.prototype.toString = function cardToString() {
   return this.suit + this.value
 }
 
-function setCookie(name,value,days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+function makeid(length) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
 }
 
+function main(){
+    var room_name = makeid(10)
+
+    $.ajaxSetup({
+      xhrFields: {
+        withCredentials: true
+      }
+    });
+
+    $.get("http://studentethz.ch/api/?action=create_player&p_name=Peter")
+    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+    $.get("http://studentethz.ch/api/?action=create_player&p_name=Hans")
+    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+    $.get("http://studentethz.ch/api/?action=create_player&p_name=Frida")
+    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+    $.get("http://studentethz.ch/api/?action=create_player&p_name=Toni")
+    $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+
+    var table = new Table(1)
+    table.addCard(1,new Card(1))
+    table.addCard(2,new Card(2))
+    table.addCard(3,new Card(3))
+
+
+    var player = new Player(table, 0)
+    player.draw()
+
+    var elem = document.getElementById('gameField'),
+        elemLeft = elem.offsetLeft,
+        elemTop = elem.offsetTop,
+        context = elem.getContext('2d'),
+        elements = [];
+
+    // Add event listener for `click` events.
+    elem.addEventListener('click', function(event) {
+        var c = document.getElementById("gameField");
+        var rect = c.getBoundingClientRect();
+        var ctx = c.getContext("2d");
+
+        var x =(event.clientX-rect.left)*c.width/rect.width,
+            y = (event.clientY-rect.top)*c.height/rect.height;
+        player.clicked(x,y)
+    }, false);
+
+}
 
 main()
-// Credentials akzeptieren
-setCookie("PHPSESSID","3vfbeomvh8p5j2fftouu045nv5",1000)
-
-
-
-var table = new Table(1)
-table.addCard(1,new Card(1))
-table.addCard(2,new Card(2))
-table.addCard(3,new Card(3))
-
-var player = new Player(table, 0)
-player.draw()
-
-
-
-var elem = document.getElementById('gameField'),
-    elemLeft = elem.offsetLeft,
-    elemTop = elem.offsetTop,
-    context = elem.getContext('2d'),
-    elements = [];
-
-// Add event listener for `click` events.
-elem.addEventListener('click', function(event) {
-    var c = document.getElementById("gameField");
-    var rect = c.getBoundingClientRect();
-    var ctx = c.getContext("2d");
-
-    var x =(event.clientX-rect.left)*c.width/rect.width,
-        y = (event.clientY-rect.top)*c.height/rect.height;
-    player.clicked(x,y)
-}, false);
