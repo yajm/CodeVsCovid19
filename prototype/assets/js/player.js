@@ -250,6 +250,42 @@ function makeid(length) {
    return result;
 }
 
+class Game{
+  constructor(){
+    this.table = new Table(0)
+    this.player = new Player(this.table,0)
+    this.room_name=null
+    this.id=null
+    this.player1=null
+    this.player2=null
+    this.player3=null
+    this.player4=null
+    this.turn=0
+  }
+
+  update(){
+    game = this
+    $.getJSON("http://studentethz.ch/api/?action=game_state",
+        function(data) {
+          if(error==-1){
+            for(var i = 0; i < 4; i++){
+              if(game.table.cards[i].index != data.players[i].last_card){
+                game.table.cards[i] = new Card(data.players[i].last_card)
+              }
+            }
+            game.turn = data.turn
+            game.room_name = data.room_name
+            game.id=data.id
+            game.player1=data.player1
+            game.player2=data.player2
+            game.player3=data.player3
+            game.player4=data.player4
+          }
+     });
+  }
+
+}
+
 function main(){
     var room_name = makeid(10)
 
@@ -267,6 +303,11 @@ function main(){
     $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
     $.get("http://studentethz.ch/api/?action=create_player&p_name=Toni")
     $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
+
+    $.getJSON("http://studentethz.ch/api/?action=game_state",
+        function(data) {
+          console.log("Game State",data)
+     });
 
     var table = new Table(1)
     table.addCard(1,new Card(1))
