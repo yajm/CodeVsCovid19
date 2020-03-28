@@ -94,6 +94,12 @@
 					break;
 
 				case 'my_cards':
+					# echo "Session:<br>";
+					# echo '<pre>';
+					# var_dump($_SESSION);
+					# echo '</pre>';
+					# echo "<br>###################<br>";
+
 					if(!isset($_SESSION["player"])) {
 						$res["error"] = "74";
 						$res["errorstr"] = "First create a player before getting state of game";
