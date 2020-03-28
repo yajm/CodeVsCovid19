@@ -49,10 +49,19 @@ cardImages = []
 cardWidth = 175
 cardHeight=250
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> Visually show who you are and whos turn it is
+=======
+>>>>>>> Visually show who you are and whos turn it is
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> Visually show who you are and whos turn it is
+
+>>>>>>> Visually show who you are and whos turn it is
 for(var i = 0; i < cardFiles.length; i++){
   var image = new Image()
   image.src = cardFiles[i]
@@ -66,6 +75,7 @@ class Player {
     this.id = null
     this.cards = null
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     this.width=0.8
     this.relYPos=0.7
@@ -73,6 +83,20 @@ class Player {
 =======
     this.width=0.8
     this.relYPos=0.7
+=======
+    this.width=0.8
+    this.relYPos=0.7
+=======
+<<<<<<< HEAD
+
+    this.width=0.8
+    this.relYPos=0.7
+
+=======
+    this.width=0.8
+    this.relYPos=0.7
+>>>>>>> Visually show who you are and whos turn it is
+>>>>>>> Visually show who you are and whos turn it is
 >>>>>>> Visually show who you are and whos turn it is
   }
 
@@ -95,11 +119,23 @@ class Player {
     }
     else{
 <<<<<<< HEAD
+<<<<<<< HEAD
 
       context.clearRect(left,posy,cardWidth,cardHeight)
+=======
+      context.clearRect(left,posy,cardWidth,cardHeight)
+=======
+<<<<<<< HEAD
+
+      context.clearRect(left,posy,cardWidth,cardHeight)
+>>>>>>> Visually show who you are and whos turn it is
 
 =======
       context.clearRect(left,posy,cardWidth,cardHeight)
+>>>>>>> Visually show who you are and whos turn it is
+<<<<<<< HEAD
+=======
+>>>>>>> Visually show who you are and whos turn it is
 >>>>>>> Visually show who you are and whos turn it is
     }
 
@@ -127,8 +163,17 @@ class Table {
     this.relXPos = 0.8
     this.relYPos = 0.2
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> Visually show who you are and whos turn it is
+=======
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> Visually show who you are and whos turn it is
+>>>>>>> Visually show who you are and whos turn it is
 >>>>>>> Visually show who you are and whos turn it is
     this.relSize = 0.09
 
@@ -138,8 +183,17 @@ class Table {
     this.turn=0
     this.protagonist=0
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> Visually show who you are and whos turn it is
+=======
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> Visually show who you are and whos turn it is
+>>>>>>> Visually show who you are and whos turn it is
 >>>>>>> Visually show who you are and whos turn it is
     this.full=false
   }
@@ -256,9 +310,15 @@ class Card{
     this.height = cardHeight
 <<<<<<< HEAD
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> Visually show who you are and whos turn it is
 =======
 >>>>>>> Visually show who you are and whos turn it is
 
+>>>>>>> Visually show who you are and whos turn it is
     this.image = cardImages[index]
     this.loaded = false
 
@@ -352,8 +412,17 @@ function doPolling(game){
           ]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> Visually show who you are and whos turn it is
+=======
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> Visually show who you are and whos turn it is
+>>>>>>> Visually show who you are and whos turn it is
 >>>>>>> Visually show who you are and whos turn it is
           game.table.names = [
             data.players[0].name,
