@@ -265,7 +265,7 @@ class Game{
 
     console.log("claimning")
 
-    if(fthis.table.isClicked(x,y)){
+    if(this.table.isClicked(x,y)){
       $.getJSON("https://studentethz.ch/api/?action=claim",
         function (data) {
           console.log("Claimed",data)
