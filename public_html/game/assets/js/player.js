@@ -315,11 +315,7 @@ class Game{
     console.log("claimning")
 
     if(this.table.isClicked(x,y)){
-<<<<<<< HEAD:public_html/game/assets/js/player.js
       $.getJSON("../api/?action=claim",
-=======
-      $.getJSON("https://studentethz.ch/api/?action=claim",
->>>>>>> Claiming and playing in turns works:game/assets/js/player.js
         function (data) {
           console.log("Claimed",data)
         }
