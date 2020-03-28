@@ -27,14 +27,14 @@ function onSubmit() {
   var room = document.getElementById("room").value
   var id = null
 
-  $.post("http://studentethz.ch/api/?action=create_player&p_name="+name,
+  $.post("https://studentethz.ch/api/?action=create_player&p_name="+name,
        function(data) {
-         $.post("http://studentethz.ch/api/?action=join_game&room_name="+room,
+         $.post("https://studentethz.ch/api/?action=join_game&room_name="+room,
           function(data){
-            $.getJSON("http://studentethz.ch/api/?action=game_state",
+            $.getJSON("https://studentethz.ch/api/?action=game_state",
                  function(data) {
                    console.log(data)
-                   window.location = "test.html"
+                   window.location = "game"
                  })
           })
    })
