@@ -93,6 +93,25 @@
 					}
 					break;
 
+				case 'my_cards':
+					if(!isset($_SESSION["player"])) {
+						$res["error"] = "74";
+						$res["errorstr"] = "First create a player before getting state of game";
+					}
+					else if(!isset($_SESSION["game"])) {
+						$res["error"] = "17";
+						$res["errorstr"] = "First join a game before getting state of game";
+					}
+					else {
+						$this->refreshGame();
+						$res["cards"] = [];
+						$cards = $GLOBALS["db"]->query("SELECT * FROM rel_inhand WHERE player_id=?", $_SESSION["player"]["id"]);
+						for ($q=0; $q < sizeof($cards); $q++) { 
+							array_push($res["cards"], $cards[$q]["card_num"]);
+						}
+					}	
+					break;
+
 				case 'play_card':
 					if(!isset($_SESSION["player"])) {
 						$res["error"] = "325";
