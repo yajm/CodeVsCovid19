@@ -1,8 +1,8 @@
 class Player {
   constructor(cards) {
     this.cards = cards
-    this.width=0.75
-    this.height=0.65
+    this.width=0.4
+    this.relYPos=0.8
   }
 
   displayCards() {
@@ -12,12 +12,20 @@ class Player {
   draw() {
     var c = document.getElementById("gameField");
     var context = c.getContext('2d')
-    context.clearRect(0,0,c.width,c.height)
+
     var width = this.width * c.width
-    var posy = c.height * this.height
+    var posy = c.height * this.relYPos
     var spacing = width/cards.length
 
     var left = (c.width - width) / 2
+
+    if(cards.length > 0){
+      context.clearRect(left,posy,(cards.length)*spacing+cards[0].width,cards[0].height)
+    }
+    else{
+      context.clearRect(left,posy,500,500)
+    }
+
     for (var i = 0; i < cards.length; i++){
       var card = cards[i]
       var posx = left + i*spacing
@@ -26,7 +34,6 @@ class Player {
   }
 
   clicked(x,y) {
-    console.log(x,y)
     for (var i = 0; i < this.cards.length; i++){
       var card = this.cards[i]
       if(this.cards[i].isClicked(x,y)){
@@ -35,6 +42,42 @@ class Player {
       }
     }
     this.draw()
+  }
+
+}
+
+class Table {
+  constructor(){
+    this.relXPos = 0.5
+    this.relYPos = 0.5
+    this.relSize = 0.08
+
+    this.card1 = null
+    this.card2 = null
+    this.card3 = null
+    this.card4 = null
+  }
+
+  draw(){
+    var c = document.getElementById("gameField");
+    var context = c.getContext('2d')
+
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+
+    if(this.card1 != null){
+      this.card1.draw(centerX, centerY+offset)
+    }
+    if(this.card2 != null){
+      this.card2.draw(centerX-offset, centerY)
+    }
+    if(this.card3 != null){
+      this.card3.draw(centerX, centerY-offset)
+    }
+    if(this.card4 != null){
+      this.card4.draw(centerX+offset, centerY)
+    }
   }
 
 }
@@ -82,18 +125,20 @@ class Card{
     this.index = index
     this.x = 0
     this.y = 0
-    this.borderColor='#000'
-    this.fillColor='#fff'
-    this.fontColor='#000'
     this.borderSize=1
     this.image = new Image();
 
-    this.width = 200
-    this.height = 400
+    this.width = 100
+    this.height = 160
+
+    this.loaded = false
 
     this.image.card = this
     this.image.src = this.cardFiles[index]
-    this.image.onload = function() {this.card.draw(this.card.x, this.card.y)}
+    this.image.onload = function() {
+      this.card.draw(this.card.x, this.card.y)
+      this.card.loaded=true
+    }
   }
 
 
@@ -102,11 +147,10 @@ class Card{
     this.y=y
     var c = document.getElementById("gameField");
     var ctx = c.getContext("2d");
-    ctx.drawImage(this.image,x,y)
+    ctx.drawImage(this.image,x,y,this.width, this.height)
   }
 
   isClicked(x,y) {
-    console.log(x,y,this.x, this.y, this.width,this.height)
     return this.x <= x && this.x + this.width >= x &&  this.y <= y && this.y + this.height >= y
   }
 
@@ -125,6 +169,21 @@ Card.prototype.toString = function cardToString() {
   return this.suit + this.value
 }
 
+
+
+var table = new Table()
+
+table.card1 = new Card(0)
+table.card2 = new Card(1)
+table.card3 = new Card(2)
+table.card4 = new Card(3)
+
+table.draw()
+
+var c = document.getElementById("gameField");
+var ctx = c.getContext("2d");
+
+
 cards = [
   new Card(0),
   new Card(2),
@@ -137,9 +196,7 @@ cards = [
   new Card(35)
 ]
 
-
 var player = new Player(cards)
-var allLoaded = false
 player.draw()
 
 var elem = document.getElementById('gameField'),
@@ -150,9 +207,11 @@ var elem = document.getElementById('gameField'),
 
 // Add event listener for `click` events.
 elem.addEventListener('click', function(event) {
-    var x = event.pageX - elemLeft,
-        y = event.pageY - elemTop;
+    var c = document.getElementById("gameField");
+    var rect = c.getBoundingClientRect();
+    var ctx = c.getContext("2d");
 
+    var x =(event.clientX-rect.left)*c.width/rect.width,
+        y = (event.clientY-rect.top)*c.height/rect.height;
     player.clicked(x,y)
-
 }, false);
