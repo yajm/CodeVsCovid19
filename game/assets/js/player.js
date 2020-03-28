@@ -232,7 +232,7 @@ class Game{
       console.log("forward")
       var cardIndex = this.player.clicked(x,y)
       if(cardIndex != null){
-        $.getJSON("http://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
+        $.getJSON("https://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
           function (data) {
             console.log("Play",data)
           }
@@ -247,7 +247,7 @@ class Game{
 }
 
 function doPolling(game){
-  $.getJSON("http://studentethz.ch/api/?action=game_state",
+  $.getJSON("https://studentethz.ch/api/?action=game_state",
       function(data) {
         console.log(data)
         if(data.error==-1){
@@ -275,25 +275,6 @@ function doPolling(game){
         }
         setTimeout(function(){doPolling(game)},500);
    });
-}
-
-
-function setup_dummy(){
-  var room_name = makeid(10)
-  $.get("http://studentethz.ch/api/?action=create_player&p_name=Peter")
-  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-  $.get("http://studentethz.ch/api/?action=create_player&p_name=Hans")
-  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-  $.get("http://studentethz.ch/api/?action=create_player&p_name=Frida")
-  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-  $.get("http://studentethz.ch/api/?action=create_player&p_name=Toni")
-  $.get("http://studentethz.ch/api/?action=join_game&room_name="+room_name)
-
-  $.getJSON("http://studentethz.ch/api/?action=game_state",
-      function(data) {
-        console.log("Game State",data)
-   });
-
 }
 
 
