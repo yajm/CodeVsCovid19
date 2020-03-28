@@ -3,18 +3,20 @@ class Player {
 
     var player = this
 
-    this.cards = [new Card(4),new Card(5),new Card(6)]
+    $.ajaxSetup({
+      url: "http://studentethz.ch/api/",
+      xhrFields: {
+        withCredentials: true
+      }
+    });
 
     $.getJSON("http://studentethz.ch/api/?action=my_cards",
        function(data) {
-         if(data.error == -1){
-           for(var i = 0; i < data.cards.length; i++){
-             player.cards.append(new Card(data.cards[i]-1))
-           }
-         }
+         console.log("Request",this)
+         console.log("Data",data)
     });
 
-    console.log(this)
+    this.cards=[]
 
     this.width=0.4
     this.relYPos=0.8
@@ -56,13 +58,19 @@ class Player {
       if(this.cards[i].isClicked(x,y)){
         if(this.table.addCard(this.playerIndex, this.cards[i])){
           this.table.card1 = this.cards[i]
+
+          $.getJSON("http://studentethz.ch/api/?action=play_card&card_num="+this.cards[i],
+             function(data) {
+               console.log("Play Card:",data)
+          });
+
           this.cards.splice(i,1)
           break
         }
       }
     }
 
-    if(this.table.isClicked(x,y)){
+    if(this.table.isClicked(x,y) && this.table.full){
       this.table.claim(this.playerIndex)
     }
 
@@ -234,6 +242,22 @@ Card.prototype.toString = function cardToString() {
   return this.suit + this.value
 }
 
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+
+main()
+// Credentials akzeptieren
+setCookie("PHPSESSID","3vfbeomvh8p5j2fftouu045nv5",1000)
+
+
 
 var table = new Table(1)
 table.addCard(1,new Card(1))
@@ -261,16 +285,3 @@ elem.addEventListener('click', function(event) {
         y = (event.clientY-rect.top)*c.height/rect.height;
     player.clicked(x,y)
 }, false);
-
-function setCookie(name,value,days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
-
-// Credentials akzeptieren
-setCookie("PHPSESSID","rjdjm2fb1b7gjlrfi2293jdcrq",1000)
