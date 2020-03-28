@@ -26,6 +26,8 @@ if(isset($_POST['submit'])) {
     $output = curl_exec($ch);
     curl_setopt($ch, CURLOPT_URL, "http://studentethz.ch/api/?action=join_game&room_name=".$room);
     $game_joint = curl_exec($ch);
+    #curl_setopt($ch, CURLOPT_URL, "http://studentethz.ch/api/?action=my_cards");
+    #$game_state = curl_exec($ch);
     curl_close($ch);
 
     header('Location: game.php');
