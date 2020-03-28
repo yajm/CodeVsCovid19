@@ -219,6 +219,7 @@ class Game{
   }
 
   updatePlayerCards(cards){
+    cards.sort()
     this.player.cards = []
     for(var i = 0; i < cards.length; i++){
       this.player.cards.push(new Card(cards[i]-1))
