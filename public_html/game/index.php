@@ -22,10 +22,17 @@
     }
   </style>
   <canvas id="gameField" width="2000" height="1000"></canvas>
-  <iframe allow="camera; microphone" src="https://meet.jit.si/Bxwls712aCA91L2"></iframe>
+  <iframe id="jitsi" allow="camera; microphone" src="<?php echo "https://meet.jit.si/coronajass".$_GET["id"];?>"></iframe>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="assets/js/player.js"></script>
+  <script src="assets/js/player.js"></script>  
+ <!-- // $.getJSON("../api/?action=game_state",
+  //     function(data) {
+  //       console.log(data)     
+  //       game.id=data.game.id
+  // });
+
+  //String pagenNameValue=request.getParameter("pagename");
+  //document.getElementById('jitsi').src = "https://meet.jit.si/coronajass-"+game.id;
+-->
 </body>
 </html>
-
-<!--https://meet.jit.si/Bxwls712aCA91L2-->
