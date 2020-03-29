@@ -547,18 +547,24 @@ function doPolling(game){
 
             game.player.id = Number(data.protagonist)
             game.table.protagonist = game.player_ids.indexOf(game.player.id)
-            var player_cards = data.players[game.player_ids.indexOf(game.player.id)].cards
-            console.log()
-            game.updatePlayerCards(player_cards)
+            var index = game.player_ids.indexOf(game.player.id)
+            if(index != -1){
+              game.updatePlayerCards(data.players[index].cards)
+            }
+            else{
+              game.updatePlayerCards([])
+            }
 
           }
           else{
             game.player.id = Number(data.protagonist)
-
-            var protagonist_index = game.player_ids.indexOf(game.player.id)
-            var claimed_cards = data.players[game.player_ids.indexOf(game.player.id)].claimed
-            game.updatePlayerCards(claimed_cards)
-
+            var index = game.player_ids.indexOf(game.player.id)
+            if(index != -1){
+              game.updatePlayerCards(data.players[index].claimed)
+            }
+            else{
+              game.updatePlayerCards([])
+            }
             game.newGame.names = [null, null, null]
 
             for(var i = 0; i < 4; i++){
