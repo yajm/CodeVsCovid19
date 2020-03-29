@@ -175,6 +175,7 @@ class Table {
 
     context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
                       2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth+80)
+
   }
 
   draw(){
@@ -237,40 +238,6 @@ class Table {
      }
     }
   }
-
-  roundRect(ctx, x, y, width, height, radius, fill, stroke) {
-    if (typeof stroke === 'undefined') {
-      stroke = true;
-    }
-    if (typeof radius === 'undefined') {
-      radius = 10;
-    }
-    if (typeof radius === 'number') {
-      radius = {tl: radius, tr: radius, br: radius, bl: radius};
-    } else {
-      var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
-      for (var side in defaultRadius) {
-        radius[side] = radius[side] || defaultRadius[side];
-      }
-    }
-    ctx.beginPath();
-    ctx.moveTo(x + radius.tl, y);
-    ctx.lineTo(x + width - radius.tr, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-    ctx.lineTo(x + width, y + height - radius.br);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
-    ctx.lineTo(x + radius.bl, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
-    ctx.lineTo(x, y + radius.tl);
-    ctx.quadraticCurveTo(x, y, x + radius.tl, y);
-    ctx.closePath();
-    if (fill) {
-      ctx.fill();
-    }
-    if (stroke) {
-      ctx.stroke();
-    }
-  }
 }
 
 class NewGame {
@@ -278,7 +245,6 @@ class NewGame {
     this.relXPos = 0.8
     this.relYPos = 0.2
     this.relSize = 0.09
-<<<<<<< HEAD
 
     this.protagonist = null
     this.names = [null, null, null, null]
@@ -304,33 +270,6 @@ class NewGame {
     context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
                       2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80)
 
-=======
-
-    this.protagonist = null
-    this.names = [null, null, null, null]
-  }
-
-  clear(){
-    var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
-
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    var outlineWidth=4
-
-    var textOffset=10
-    var offsets = [
-      [0,offset],
-      [-offset,0],
-      [0,-offset],
-      [offset,0]
-    ]
-
-    context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
-                      2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80)
-
->>>>>>> Choose place before game
   }
 
   draw(){
@@ -441,30 +380,12 @@ class Card{
 
 
   draw(x,y){
-    this.x=x;
-    this.y=y;
+    this.x=x
+    this.y=y
     var c = document.getElementById("gameField");
     var ctx = c.getContext("2d");
-    ctx.save();
-    this.roundedImage(ctx, x,y,this.width, this.height, 10);
-    ctx.clip();
-    ctx.drawImage(this.image,x,y,this.width, this.height);
-    ctx.restore();
+    ctx.drawImage(this.image,x,y,this.width, this.height)
   }
-
-  roundedImage(ctx, x,y,width,height,radius){
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
-    }
 
   isClicked(x,y) {
     return this.x <= x && this.x + this.width >= x &&  this.y <= y && this.y + this.height >= y
@@ -507,20 +428,9 @@ class Game{
         this.player.cards.splice(cardIndex,1)
         this.player.draw()
       }
-<<<<<<< HEAD
 
       console.log("claiming")
       console.log(this.table.isFull(), this.table.isClicked(x,y))
-=======
-
-<<<<<<< HEAD
-      console.log("claimning")
-
->>>>>>> Choose place before game
-=======
-      console.log("claiming")
-      console.log(this.table.isFull(), this.table.isClicked(x,y))
->>>>>>> Player can choose their place, which is reflected in game
       if(this.table.isFull() && this.table.isClicked(x,y)){
         for(var i = 0; i < 4; i++){
           console.log("Table Cards:", this.table.cards[i])
@@ -558,7 +468,6 @@ function doPolling(game){
           game.room_name = data.game.room_name
           game.id=data.game.id
           game.finished=data.game.finished
-<<<<<<< HEAD
 
           game.player_ids = []
           game.table.names = []
@@ -571,33 +480,6 @@ function doPolling(game){
               }
           }
 
-=======
-
-          game.player_ids = [
-            data.players[0].id,
-            data.players[1].id,
-            data.players[2].id,
-            data.players[3].id
-          ]
-
-          game.table.names = [
-            data.players[0].name,
-            data.players[1].name,
-            data.players[2].name,
-            data.players[3].name
-          ]
-
-<<<<<<< HEAD
->>>>>>> Choose place before game
-=======
-          game.table.positions = [
-            data.players[0].position,
-            data.players[1].position,
-            data.players[2].position,
-            data.players[3].position
-          ]
-
->>>>>>> Player can choose their place, which is reflected in game
           if(!game.finished){
             for(var i = 0; i < 4; i++){
               if(data.players[i].last_card!= null){
@@ -627,11 +509,7 @@ function doPolling(game){
             game.newGame.names = [null, null, null]
 
             for(var i = 0; i < 4; i++){
-<<<<<<< HEAD
               if(data.players[i]!=null && data.players[i].ready){
-=======
-              if(data.players[i].ready){
->>>>>>> Choose place before game
                 game.newGame.names[data.players[i].position] = data.players[i].name
                 if(i==protagonist_index){
                   game.newGame.protagonist = data.players[i].position
