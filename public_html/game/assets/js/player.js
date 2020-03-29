@@ -570,7 +570,7 @@ function doPolling(game){
             for(var i = 0; i < 4; i++){
               if(data.players[i]!=null && data.players[i].ready){
                 game.newGame.names[data.players[i].position] = data.players[i].name
-                if(i==protagonist_index){
+                if(i==index){
                   game.newGame.protagonist = data.players[i].position
                 }
               }
