@@ -372,8 +372,9 @@ class NewGame {
      context.textAlign = 'center';
      context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
     }
+  }
 
-    roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  roundRect(ctx, x, y, width, height, radius, fill, stroke) {
       if (typeof stroke === 'undefined') {
         stroke = true;
       }
@@ -407,7 +408,6 @@ class NewGame {
       }
 
     }
-  }
 
   isClicked(x,y) {
     var c = document.getElementById("gameField");
