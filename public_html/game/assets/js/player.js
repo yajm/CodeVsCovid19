@@ -273,7 +273,7 @@ class Game{
     console.log(this.player_ids, this.turn, this.player.id, this.player.cards)
     var cardIndex = this.player.clicked(x,y)
     if(cardIndex != null){
-      $.getJSON("https://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
+      $.getJSON("../api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
         function (data) {
           console.log("Play",data)
         }
@@ -286,7 +286,7 @@ class Game{
     console.log("claimning")
 
     if(this.table.isClicked(x,y)){
-      $.getJSON("https://studentethz.ch/api/?action=claim",
+      $.getJSON("../api/?action=claim",
         function (data) {
           console.log("Claimed",data)
         }
@@ -296,7 +296,7 @@ class Game{
 }
 
 function doPolling(game){
-  $.getJSON("https://studentethz.ch/api/?action=game_state",
+  $.getJSON("../api/?action=game_state",
       function(data) {
         console.log(data)
         if(data.error==-1){
@@ -332,7 +332,16 @@ function doPolling(game){
           game.player.id = Number(data.protagonist)
           game.table.protagonist = game.player_ids.indexOf(game.player.id)
 
-          game.updatePlayerCards(data.players[game.player_ids.indexOf(game.player.id)].cards)
+          var player_cards = data.players[game.player_ids.indexOf(game.player.id)].cards
+
+          if(player_cards.size==0 && game.table.cards[0] == null &&
+              game.table.cards[1] == null && game.table.cards[2] == null &&
+              game.table.cards[3] == null){
+                // Game is finished
+              }
+          else{
+            game.updatePlayerCards(data.players[game.player_ids.indexOf(game.player.id)].cards)
+          }
         }
         setTimeout(function(){doPolling(game)},500);
    });
