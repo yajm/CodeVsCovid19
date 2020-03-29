@@ -298,14 +298,6 @@ class NewGame {
     var offset = c.width*this.relSize
     var outlineWidth=4
 
-    var textOffset=10
-    var offsets = [
-      [0,offset],
-      [-offset,0],
-      [0,-offset],
-      [offset,0]
-    ]
-
     context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
                       2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80)
 
@@ -320,9 +312,9 @@ class NewGame {
     var offset = c.width*this.relSize
 
     var offsets = [
-      [0,-offset],
-      [-offset,0],
       [0,offset],
+      [-offset,0],
+      [0,-offset],
       [offset,0]
     ]
 
