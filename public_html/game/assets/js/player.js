@@ -469,26 +469,16 @@ function doPolling(game){
           game.id=data.game.id
           game.finished=data.game.finished
 
-          game.player_ids = [
-            data.players[0].id,
-            data.players[1].id,
-            data.players[2].id,
-            data.players[3].id
-          ]
-
-          game.table.names = [
-            data.players[0].name,
-            data.players[1].name,
-            data.players[2].name,
-            data.players[3].name
-          ]
-
-          game.table.positions = [
-            data.players[0].position,
-            data.players[1].position,
-            data.players[2].position,
-            data.players[3].position
-          ]
+          game.player_ids = []
+          game.table.names = []
+          game.table.positions = []
+          for(var i = 0; i < 4; i++){
+              if(data.players[i] != null){
+                game.player_ids.push(data.players[0].id)
+                game.table.names.push(data.players[0].name)
+                game.table.positions.push(data.players[0].position)
+              }
+          }
 
           if(!game.finished){
             for(var i = 0; i < 4; i++){
@@ -519,7 +509,7 @@ function doPolling(game){
             game.newGame.names = [null, null, null]
 
             for(var i = 0; i < 4; i++){
-              if(data.players[i].ready){
+              if(data.players[i]!=null && data.players[i].ready){
                 game.newGame.names[data.players[i].position] = data.players[i].name
                 if(i==protagonist_index){
                   game.newGame.protagonist = data.players[i].position
