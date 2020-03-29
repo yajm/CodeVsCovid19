@@ -1,5 +1,6 @@
 <html>
-<head>
+<head><title>Corona Jass</title>
+  
   <link rel="shortcut icon" href="assets/favicon/CoronaJass.ico?v=1.0">
   <link rel="icon" sizes="16x16 32x32 64x64" href="/assets/favicon/CoronaJass.ico?v=1.0">
   <link rel="icon" type="image/png" sizes="196x196" href="assets/favicon/CoronaJass-192.png?v=1.0">
