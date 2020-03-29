@@ -75,7 +75,7 @@ function onSubmit() {
   var name = document.getElementById("name").value
   var room = document.getElementById("room").value
 
-  $.post("api/?delete",
+  $.post("api/?action=delete",
       function(data) {
       $.post("api/?action=create_player&p_name="+name,
            function(data) {
