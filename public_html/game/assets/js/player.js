@@ -110,7 +110,7 @@ class Table {
   constructor(startPlayer){
     this.relXPos = 0.8
     this.relYPos = 0.2
-    this.relSize = 0.05
+    this.relSize = 0.07
 
     this.currentPlayer = startPlayer
     this.cards = [null, null, null, null]
@@ -281,7 +281,7 @@ class NewGame {
   constructor(){
     this.relXPos = 0.8
     this.relYPos = 0.2
-    this.relSize = 0.05
+    this.relSize = 0.07
 
     this.protagonist = null
     this.names = [null, null, null, null]
