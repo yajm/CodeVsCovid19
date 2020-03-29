@@ -220,7 +220,7 @@ class Table {
       // Fill card holder
       roundRect(context, centerX-outlineWidth+offsets[i][0],
                        centerY-outlineWidth+offsets[i][1],
-                       cardWidth,cardHeight, 16, color, false)
+                       cardWidth,cardHeight, 24, color, false)
      // Draw Name
      if(this.positions.indexOf(this.protagonist) == i){
        context.fillStyle = "#80000080";
@@ -354,7 +354,7 @@ class NewGame {
       // Fill card holder
       this.roundRect(context, centerX+offsets[i][0],
                        centerY+offsets[i][1],
-                       cardWidth,cardHeight, 16, color, false)
+                       cardWidth,cardHeight, 24, color, false)
      // Draw Name
      if(this.protagonist == i){
        context.fillStyle = "#80000080";
