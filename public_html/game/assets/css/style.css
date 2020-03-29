@@ -4,6 +4,11 @@ body {
   background-size: 100%;
 }
 
+a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
 .parent {
   height: 100%;
   position: relative;
@@ -16,6 +21,27 @@ body {
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.topRight {
+  margin: 0;
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
+
+.bottomRight {
+  margin: 0;
+  position: absolute;
+  top: 16%;
+  right: 5%;
+}
+
+.corona {
+  margin: 0;
+  position: absolute;
+  top: 5%;
+  left: 5%;
 }
 
 .button {
