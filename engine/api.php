@@ -261,6 +261,12 @@
 					$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $_GET["turn"], $_SESSION["game"]["id"]);
 					break;
 
+				case 'delete':
+					$this->refreshGame();
+					$GLOBALS["db"]->query("DELETE FROM game WHERE create_date < (NOW() - INTERVAL 4 HOUR)");
+					$GLOBALS["db"]->query("DELETE FROM player WHERE create_date < (NOW() - INTERVAL 4 HOUR)");
+					break;
+
 				default:
 					$res["error"] = "8568";
 					$res["errorstr"] = "Keine Action spezifiziert";
