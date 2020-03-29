@@ -636,22 +636,6 @@ const supports_backdrop_filter = (function() {
     (document.documentMode === undefined || document.documentMode > 9);
 })();
 
-
-document.querySelector('.container')
-  .addEventListener('mousemove', (evt) => {
-  mouse.x = evt.offsetX;
-  mouse.y = evt.offsetY;
-  if( !mouse.dirty ) {
-    if( supports_backdrop_filter ) {
-      requestAnimationFrame( move );
-    }
-    else if( !playing ) {
-      requestAnimationFrame( loop );
-    }
-  }
-  mouse.dirty = true;
-});
-
 // unsupporting browsers 
 if( !supports_backdrop_filter ) {
   ctx.filter = 'blur(' + spread + 'px)';
