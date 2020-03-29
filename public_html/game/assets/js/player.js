@@ -48,20 +48,7 @@ cardImages = []
 
 cardWidth = 175
 cardHeight=250
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> Visually show who you are and whos turn it is
-=======
->>>>>>> Visually show who you are and whos turn it is
-
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Visually show who you are and whos turn it is
-
->>>>>>> Visually show who you are and whos turn it is
 for(var i = 0; i < cardFiles.length; i++){
   var image = new Image()
   image.src = cardFiles[i]
@@ -74,30 +61,8 @@ class Player {
     this.game = game
     this.id = null
     this.cards = null
-<<<<<<< HEAD
-<<<<<<< HEAD
-
     this.width=0.8
     this.relYPos=0.7
-
-=======
-    this.width=0.8
-    this.relYPos=0.7
-=======
-    this.width=0.8
-    this.relYPos=0.7
-=======
-<<<<<<< HEAD
-
-    this.width=0.8
-    this.relYPos=0.7
-
-=======
-    this.width=0.8
-    this.relYPos=0.7
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
   }
 
   displayCards() {
@@ -118,25 +83,7 @@ class Player {
       context.clearRect(left,posy,(this.cards.length)*spacing+this.cards[0].width,this.cards[0].height)
     }
     else{
-<<<<<<< HEAD
-<<<<<<< HEAD
-
       context.clearRect(left,posy,cardWidth,cardHeight)
-=======
-      context.clearRect(left,posy,cardWidth,cardHeight)
-=======
-<<<<<<< HEAD
-
-      context.clearRect(left,posy,cardWidth,cardHeight)
->>>>>>> Visually show who you are and whos turn it is
-
-=======
-      context.clearRect(left,posy,cardWidth,cardHeight)
->>>>>>> Visually show who you are and whos turn it is
-<<<<<<< HEAD
-=======
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
     }
 
     for (var i = 0; i < this.cards.length; i++){
@@ -162,19 +109,6 @@ class Table {
   constructor(startPlayer){
     this.relXPos = 0.8
     this.relYPos = 0.2
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> Visually show who you are and whos turn it is
-=======
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
     this.relSize = 0.09
 
     this.currentPlayer = startPlayer
@@ -182,19 +116,6 @@ class Table {
     this.names = ["", "", "", ""]
     this.turn=0
     this.protagonist=0
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> Visually show who you are and whos turn it is
-=======
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
     this.full=false
   }
 
@@ -308,17 +229,7 @@ class Card{
 
     this.width = cardWidth
     this.height = cardHeight
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Visually show who you are and whos turn it is
-=======
->>>>>>> Visually show who you are and whos turn it is
-
->>>>>>> Visually show who you are and whos turn it is
     this.image = cardImages[index]
     this.loaded = false
 
@@ -362,7 +273,7 @@ class Game{
     console.log(this.player_ids, this.turn, this.player.id, this.player.cards)
     var cardIndex = this.player.clicked(x,y)
     if(cardIndex != null){
-      $.getJSON("../api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
+      $.getJSON("https://studentethz.ch/api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
         function (data) {
           console.log("Play",data)
         }
@@ -375,7 +286,7 @@ class Game{
     console.log("claimning")
 
     if(this.table.isClicked(x,y)){
-      $.getJSON("../api/?action=claim",
+      $.getJSON("https://studentethz.ch/api/?action=claim",
         function (data) {
           console.log("Claimed",data)
         }
@@ -385,7 +296,7 @@ class Game{
 }
 
 function doPolling(game){
-  $.getJSON("../api/?action=game_state",
+  $.getJSON("https://studentethz.ch/api/?action=game_state",
       function(data) {
         console.log(data)
         if(data.error==-1){
@@ -411,19 +322,6 @@ function doPolling(game){
             data.players[3].id
           ]
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> Visually show who you are and whos turn it is
-=======
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
->>>>>>> Visually show who you are and whos turn it is
           game.table.names = [
             data.players[0].name,
             data.players[1].name,
