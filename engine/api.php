@@ -263,8 +263,8 @@
 
 				case 'delete':
 					$this->refreshGame();
-					$GLOBALS["db"]->query("DELETE FROM game WHERE create_date < (NOW() - INTERVAL 4 HOUR)");
-					$GLOBALS["db"]->query("DELETE FROM player WHERE create_date < (NOW() - INTERVAL 4 HOUR)");
+					$GLOBALS["db"]->query("DELETE FROM game WHERE create_date < (CURDATE() - INTERVAL 4 HOUR)");
+					$GLOBALS["db"]->query("DELETE FROM player WHERE create_date < (CURDATE() - INTERVAL 4 HOUR)");
 					break;
 
 				default:
