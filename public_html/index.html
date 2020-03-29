@@ -1,0 +1,47 @@
+<html>
+<body>
+  <div>
+    <label for="room">Your Room</label>
+    <input name="room" id="room" value="">
+  </div>
+  <div>
+    <label for="name">Your Name</label>
+    <input name="name" id="name" value="">
+  </div>
+  <div>
+    <button onclick="onSubmit()">Start Game</button>
+    <!-- <i type="submit" value="Start Game " name="submit" > -->
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+  $.ajaxSetup({
+      xhrFields: {
+        withCredentials: true
+      }
+    });
+
+function onSubmit() {
+  var name = document.getElementById("name").value
+  var room = document.getElementById("room").value
+
+
+  $.post("api/?action=create_player&p_name="+name,
+       function(data) {
+         $.post("api/?action=join_game&room_name="+room,
+          function(data){
+            $.getJSON("api/?action=game_state",
+                 function(data) {
+                   console.log(data)
+
+                   window.location = "game?id="+data.game.id
+
+                 })
+          })
+   })
+}
+
+</script>
+</body>
+</html>
