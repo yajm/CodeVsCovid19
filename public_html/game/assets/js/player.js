@@ -629,40 +629,40 @@ function doPolling(game){
    });
 }
 
-const supports_backdrop_filter = (function() {
-  const style = document.createElement('_').style;
-  style.cssText = 'backdrop-filter: blur(2px);-webkit-backdrop-filter: blur(2px);';
-  return style.length !== 0 &&
-    (document.documentMode === undefined || document.documentMode > 9);
-})();
+// const supports_backdrop_filter = (function() {
+//   const style = document.createElement('_').style;
+//   style.cssText = 'backdrop-filter: blur(2px);-webkit-backdrop-filter: blur(2px);';
+//   return style.length !== 0 &&
+//     (document.documentMode === undefined || document.documentMode > 9);
+// })();
 
-// unsupporting browsers 
-if( !supports_backdrop_filter ) {
-  ctx.filter = 'blur(' + spread + 'px)';
+// // unsupporting browsers 
+// if( !supports_backdrop_filter ) {
+//   ctx.filter = 'blur(' + spread + 'px)';
 
-  vid.onplaying = startDrawing;
-  vid.onpause = stopDrawing;
-}
+//   vid.onplaying = startDrawing;
+//   vid.onpause = stopDrawing;
+// }
 
-function draw() {
-  const vid_rect = vid.getBoundingClientRect();
-  const can_rect = canvas.getBoundingClientRect();
-  const s_x = (can_rect.left - vid_rect.left) + border_width;
-  const s_y = (can_rect.top - vid_rect.top) + border_width;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+// function draw() {
+//   const vid_rect = vid.getBoundingClientRect();
+//   const can_rect = canvas.getBoundingClientRect();
+//   const s_x = (can_rect.left - vid_rect.left) + border_width;
+//   const s_y = (can_rect.top - vid_rect.top) + border_width;
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const offset = spread * 2;
-  const output_w = canvas.width + (offset * 2);
-  const output_h = canvas.height + (offset * 2);
-  const ratio_x = vid_rect.width / vid.videoWidth;
-  const ratio_y = vid_rect.height / vid.videoHeight;
+//   const offset = spread * 2;
+//   const output_w = canvas.width + (offset * 2);
+//   const output_h = canvas.height + (offset * 2);
+//   const ratio_x = vid_rect.width / vid.videoWidth;
+//   const ratio_y = vid_rect.height / vid.videoHeight;
 
-  ctx.drawImage(
-    vid,
-    (s_x - offset) / ratio_x, (s_y - offset) / ratio_y, output_w  / ratio_x, output_h / ratio_y,
-    -offset, -offset, output_w, output_h 
-  );
-}
+//   ctx.drawImage(
+//     vid,
+//     (s_x - offset) / ratio_x, (s_y - offset) / ratio_y, output_w  / ratio_x, output_h / ratio_y,
+//     -offset, -offset, output_w, output_h 
+//   );
+// }
 
 
 function main(){
