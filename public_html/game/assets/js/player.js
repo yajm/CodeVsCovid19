@@ -375,7 +375,7 @@ class NewGame {
      context.textAlign = 'center';
      context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
      if(i==0){
-       context.fillText("(Start Spieler)",centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+30+offsets[i][1])
+       context.fillText("Start Spieler",centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+30+offsets[i][1])
      }
     }
   }
@@ -627,6 +627,92 @@ function doPolling(game){
         }
         setTimeout(function(){doPolling(game)},500);
    });
+}
+
+
+const supports_backdrop_filter = (function() {
+  const style = document.createElement('_').style;
+  style.cssText = 'backdrop-filter: blur(2px);-webkit-backdrop-filter: blur(2px);';
+  return style.length !== 0 &&
+    (document.documentMode === undefined || document.documentMode > 9);
+})();
+
+const mouse = {
+  x: 0,
+  y: 0,
+  dirty: false
+};
+const vid = document.querySelector('video');
+const canvas = document.getElementById('gameField');
+let playing = false;
+const ctx = canvas.getContext('2d');
+const spread = 10;
+const border_width = 1; // because we add a css border around the canvas element
+  
+document.querySelector('.container')
+  .addEventListener('mousemove', (evt) => {
+  mouse.x = evt.offsetX;
+  mouse.y = evt.offsetY;
+  if( !mouse.dirty ) {
+    if( supports_backdrop_filter ) {
+      requestAnimationFrame( move );
+    }
+    else if( !playing ) {
+      requestAnimationFrame( loop );
+    }
+  }
+  mouse.dirty = true;
+});
+
+function move() {
+  canvas.style.left = (mouse.x - 25) + 'px';
+  canvas.style.top = (mouse.y - 25) + 'px';
+  mouse.dirty = false;
+}
+
+// unsupporting browsers 
+if( !supports_backdrop_filter ) {
+  ctx.filter = 'blur(' + spread + 'px)';
+
+  vid.onplaying = startDrawing;
+  vid.onpause = stopDrawing;
+}
+
+function startDrawing() {
+  playing = true;
+  loop();
+}
+function stopDrawing() {
+  playing = false;
+}
+
+function loop() {
+  if( mouse.dirty ) {
+    move();
+  }
+  draw();
+  if( playing ) {
+    requestAnimationFrame(loop);
+  }
+}
+function draw() {
+  const vid_rect = vid.getBoundingClientRect();
+  const can_rect = canvas.getBoundingClientRect();
+  const s_x = (can_rect.left - vid_rect.left) + border_width;
+  const s_y = (can_rect.top - vid_rect.top) + border_width;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const offset = spread * 2;
+  const output_w = canvas.width + (offset * 2);
+  const output_h = canvas.height + (offset * 2);
+  const ratio_x = vid_rect.width / vid.videoWidth;
+  const ratio_y = vid_rect.height / vid.videoHeight;
+
+  ctx.drawImage(
+    vid,
+    (s_x - offset) / ratio_x, (s_y - offset) / ratio_y, output_w  / ratio_x, output_h / ratio_y,
+    -offset, -offset, output_w, output_h 
+  );
 }
 
 

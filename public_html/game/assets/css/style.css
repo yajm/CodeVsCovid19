@@ -80,3 +80,16 @@ a {
   font-size: 16px;
   border-radius: 8px;
 }
+
+.container { position: relative; }
+#gameField {
+  position: absolute;
+  border: 1px solid white;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+video {
+  width: 100%;
+  cursor: none;
+}
