@@ -21,12 +21,12 @@
   <meta name="msapplication-TileColor" content="#FFFFFF">
   <meta name="msapplication-TileImage" content="game/assets/favicon/CoronaJass-144.png?v=1.0">
   <meta name="msapplication-config" content="game/assets/favicon/browserconfig.xml">
-<link rel="stylesheet" type="text/css" href="game/assets/css/style.css">
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="game/assets/css/style.css">
 </head>  
 
 <body>
 <div class="parent">
-
 <div class="corona">
 <img src="game/assets/images/corona.png" alt="" width="128px">
 </div>
