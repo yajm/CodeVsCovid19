@@ -196,10 +196,11 @@ class Table {
     ]
 
     this.clear()
+    console.log("Positions",this.positions, this.protagonist,this.positions.indexOf(this.protagonist), this.names)
 
     for(var i = 0; i < 4; i++){
       if(this.turn == i){
-        if(this.positions[this.protagonist] == i){
+        if(this.positions.indexOf(this.protagonist) == i){
           context.fillStyle = "#FF000040";
         }
         else{
@@ -207,7 +208,7 @@ class Table {
         }
       }
       else{
-        if(this.positions[this.protagonist]  == i){
+        if(this.positions.indexOf(this.protagonist) == i){
           context.fillStyle = "#00000040";
         }
         else{
@@ -219,7 +220,7 @@ class Table {
                        centerY-outlineWidth+offsets[i][1],
                        cardWidth,cardHeight)
      // Draw Name
-     if(this.positions[this.protagonist]  == i){
+     if(this.positions.indexOf(this.protagonist) == i){
        context.fillStyle = "#80000080";
        context.font = "33px Sans Bold";
      }
@@ -471,12 +472,12 @@ function doPolling(game){
 
           game.player_ids = []
           game.table.names = []
-          game.table.positions = []
+          game.table.positions = [0,0,0,0]
           for(var i = 0; i < 4; i++){
               if(data.players[i] != null){
-                game.player_ids.push(data.players[0].id)
-                game.table.names.push(data.players[0].name)
-                game.table.positions.push(data.players[0].position)
+                game.player_ids.push(data.players[i].id)
+                game.table.names.push(data.players[i].name)
+                game.table.positions[data.players[i].position]=i
               }
           }
 
@@ -495,6 +496,7 @@ function doPolling(game){
             game.player.id = Number(data.protagonist)
             game.table.protagonist = game.player_ids.indexOf(game.player.id)
             var index = game.player_ids.indexOf(game.player.id)
+            console.log(game.player_ids,game.player.id, index)
             if(index != -1){
               game.updatePlayerCards(data.players[index].cards)
             }
@@ -506,6 +508,7 @@ function doPolling(game){
           else{
             game.player.id = Number(data.protagonist)
             var index = game.player_ids.indexOf(game.player.id)
+            console.log(game.player_ids,game.player.id, index)
             if(index != -1){
               game.updatePlayerCards(data.players[index].claimed)
             }
