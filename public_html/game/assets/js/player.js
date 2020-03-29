@@ -217,6 +217,8 @@ class Table {
           color = "#00000020";
         }
       }
+
+      // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag
       // Fill card holder
       roundRect(context, centerX-outlineWidth+offsets[i][0],
                        centerY-outlineWidth+offsets[i][1],
@@ -352,6 +354,7 @@ class NewGame {
         }
       }
       // Fill card holder
+      // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag
       this.roundRect(context, centerX+offsets[i][0],
                        centerY+offsets[i][1],
                        cardWidth,cardHeight, 16, color, false)
