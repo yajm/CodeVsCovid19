@@ -203,7 +203,7 @@ class Table {
 
       if(this.turn == i){
         if(this.positions.indexOf(this.protagonist) == i){
-          color = "#B0FF000040";
+          color = "#B0FF0040";
         }
         else{
           color = "#B0FF0020";
