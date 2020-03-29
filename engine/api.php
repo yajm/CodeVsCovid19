@@ -85,10 +85,17 @@
 						$res["players"] = [];
 						for($i = 0; $i < 4; $i ++) {
 							$res["players"][$i] = $GLOBALS["db"]->query("SELECT * FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0];
-							$res["players"][$i]["cards"] = [];
-							$cards = $GLOBALS["db"]->query("SELECT * FROM rel_inhand WHERE player_id=?", $_SESSION["game"]["player".($i + 1)]);
-							for ($q=0; $q < sizeof($cards); $q++) {
-								array_push($res["players"][$i]["cards"], $cards[$q]["card_num"]);
+							if($_SESSION["game"]["player".($i + 1)] === $_SESSION["player"]["id"]){
+								$res["players"][$i]["cards"] = [];
+								$cards = $GLOBALS["db"]->query("SELECT * FROM rel_inhand WHERE player_id=?", $_SESSION["game"]["player".($i + 1)]);
+								for ($q=0; $q < sizeof($cards); $q++) {
+									array_push($res["players"][$i]["cards"], $cards[$q]["card_num"]);
+								}
+								$res["players"][$i]["claimed"] = [];
+								$claimed_cards = $GLOBALS["db"]->query("SELECT * FROM rel_stock WHERE player_id=?", $_SESSION["game"]["player".($i + 1)]);
+								for ($q=0; $q < sizeof($claimed_cards); $q++) {
+									array_push($res["players"][$i]["claimed"], $claimed_cards[$q]["card_num"]);
+								}
 							}
 						}
 					}
@@ -145,15 +152,18 @@
 						else{
 							$this->refreshGame();
 							// Set all played cards to null
+
+							for($q = 0; $q < sizeof($player_cards); $q ++) {
+							}
+
 							for($i = 0; $i < 4; $i ++) {
+								$last_card = $GLOBALS["db"]->query("SELECT last_card FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["last_card"];
+								$GLOBALS["db"]->query("INSERT INTO rel_stock (player_id, card_num) VALUES (?, ?)", $_SESSION["player"]["id"], $last_card);
 								$GLOBALS["db"]->query("UPDATE player SET last_card=null WHERE id=?", $_SESSION["game"]["player".($i + 1)]);
 							}
 							// Update turn
-							for($i = 0; $i < 4; $i ++) {
-								if($_SESSION["game"]["player".($i + 1)]==$_SESSION["player"]["id"]){
-									$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $i, $_SESSION["game"]["id"]);
-								}
-							}
+							$player_position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["player"]["id"])[0]["position"];
+							$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $player_position, $_SESSION["game"]["id"]);
 						}
 
 					}
@@ -169,15 +179,6 @@
 					}
 					else{
 						$this->refreshGame();
-						$player_id = 0;
-						for($i = 0; $i < 4; $i ++) {
-							if($_SESSION["game"]["player".($i + 1)]==$_SESSION["player"]["id"]){
-								$player_id = $i;
-							}
-						}
-						$turn = $GLOBALS["db"]->query("SELECT turn FROM game WHERE id=?", $_SESSION["game"]["id"])[0]["turn"];
-						$res["player_id"] = $player_id;
-						$res["turn"] = $turn;
 
 						$all_played=TRUE;
 						$res["lastcards"]=[0,0,0,0];
@@ -189,7 +190,10 @@
 							}
 						}
 
-						if($player_id!=$turn){
+						$player_position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["player"]["id"])[0]["position"];
+						$turn = $GLOBALS["db"]->query("SELECT turn FROM game WHERE id=?", $_SESSION["game"]["id"])[0]["turn"];
+
+						if($player_position!=$turn){
 							$res["error"] = "624";
 							$res["errorstr"] = "It's not you'r turn!";
 						}
@@ -207,6 +211,47 @@
 					}
 					break;
 
+		    	case 'sit':
+							if(!isset($_SESSION["player"])) {
+								$res["error"] = "74";
+								$res["errorstr"] = "First create a player before getting state of game";
+							}
+							else if(!isset($_SESSION["game"])) {
+								$res["error"] = "17";
+								$res["errorstr"] = "First join a game before getting state of game";
+							}
+							else {
+								$res["hello"] = "got here";
+								$this->refreshGame();
+								$is_free=TRUE;
+								for($i = 0; $i < 4; $i ++) {
+									$ready = $GLOBALS["db"]->query("SELECT ready FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["ready"];
+									if($ready){
+										$position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["position"];
+										if($position==$_GET["position"]){
+											$res["occupied"]=$i;
+											$is_free=FALSE;
+										}
+									}
+								}
+								if($is_free){
+									$GLOBALS["db"]->query("UPDATE player SET position=? WHERE id=?", $_GET["position"], $_SESSION["player"]["id"]);
+									$GLOBALS["db"]->query("UPDATE player SET ready=? WHERE id=?", 1, $_SESSION["player"]["id"]);
+								}
+
+								$all_ready=TRUE;
+								for($i = 0; $i < 4; $i ++) {
+									$ready = $GLOBALS["db"]->query("SELECT ready FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["ready"];
+									if(!$ready){
+										$all_ready=FALSE;
+									}
+								}
+								if($all_ready){
+									$GLOBALS["db"]->query("UPDATE game SET finished=0 WHERE id=?", $_SESSION["game"]["id"]);
+								}
+							}
+				break;
+
 				case 'set_turn':
 					if(!isset($_SESSION["player"])) {
 						$res["error"] = "663";
@@ -221,30 +266,7 @@
 
 					$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $_GET["turn"], $_SESSION["game"]["id"]);
 					break;
-				case 'reset_game':
-					if(!isset($_SESSION["game"])) {
-						$res["error"] = "532";
-						$res["errorstr"] = "No game is running";
-					}
-					else{
-						$global_cards = [];
-						for($i = 0; $i < 4; $i ++) {
-							$player_cards = [];
-							while(sizeof($player_cards) != 9) {
-								$randCard = rand(1, 36);
 
-								if(!in_array($randCard, $global_cards)) {
-									array_push($global_cards, $randCard);
-									array_push($player_cards, $randCard);
-								}
-							}
-
-							for($q = 0; $q < sizeof($player_cards); $q ++) {
-								$GLOBALS["db"]->query("INSERT INTO rel_inhand (player_id, card_num) VALUES (?, ?)", $_SESSION["game"]["player".($i + 1)], $player_cards[$q]);
-							}
-						}
-					}
-					break;
 				default:
 					$res["error"] = "8568";
 					$res["errorstr"] = "Keine Action spezifiziert";
