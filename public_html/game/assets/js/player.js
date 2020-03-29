@@ -174,12 +174,7 @@ class Table {
     ]
 
     context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
-<<<<<<< HEAD
                       2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth+80)
-=======
-                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth)
->>>>>>> Choose place before game
-
   }
 
   draw(){
@@ -542,9 +537,14 @@ class Game{
       console.log(this.table.isFull(), this.table.isClicked(x,y))
 =======
 
+<<<<<<< HEAD
       console.log("claimning")
 
 >>>>>>> Choose place before game
+=======
+      console.log("claiming")
+      console.log(this.table.isFull(), this.table.isClicked(x,y))
+>>>>>>> Player can choose their place, which is reflected in game
       if(this.table.isFull() && this.table.isClicked(x,y)){
         for(var i = 0; i < 4; i++){
           console.log("Table Cards:", this.table.cards[i])
@@ -611,7 +611,17 @@ function doPolling(game){
             data.players[3].name
           ]
 
+<<<<<<< HEAD
 >>>>>>> Choose place before game
+=======
+          game.table.positions = [
+            data.players[0].position,
+            data.players[1].position,
+            data.players[2].position,
+            data.players[3].position
+          ]
+
+>>>>>>> Player can choose their place, which is reflected in game
           if(!game.finished){
             for(var i = 0; i < 4; i++){
               if(data.players[i].last_card!= null){
