@@ -110,7 +110,7 @@ class Table {
   constructor(startPlayer){
     this.relXPos = 0.8
     this.relYPos = 0.2
-    this.relSize = 0.09
+    this.relSize = 0.07
 
     this.currentPlayer = startPlayer
     this.cards = [null, null, null, null]
@@ -220,7 +220,7 @@ class Table {
       // Fill card holder
       roundRect(context, centerX-outlineWidth+offsets[i][0],
                        centerY-outlineWidth+offsets[i][1],
-                       cardWidth,cardHeight, 24, color, false)
+                       cardWidth,cardHeight, 16, color, false)
      // Draw Name
      if(this.positions.indexOf(this.protagonist) == i){
        context.fillStyle = "#80000080";
@@ -354,7 +354,7 @@ class NewGame {
       // Fill card holder
       this.roundRect(context, centerX+offsets[i][0],
                        centerY+offsets[i][1],
-                       cardWidth,cardHeight, 24, color, false)
+                       cardWidth,cardHeight, 16, color, false)
      // Draw Name
      if(this.protagonist == i){
        context.fillStyle = "#80000080";
@@ -459,7 +459,7 @@ class Card{
     var c = document.getElementById("gameField");
     var ctx = c.getContext("2d");
     ctx.save();
-    this.roundedImage(ctx, x,y,this.width, this.height, 24);
+    this.roundedImage(ctx, x,y,this.width, this.height, 16);
     ctx.clip();
     ctx.drawImage(this.image,x,y,this.width, this.height);
     ctx.restore();
