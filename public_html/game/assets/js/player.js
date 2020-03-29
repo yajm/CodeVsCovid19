@@ -223,7 +223,7 @@ class Table {
                        cardWidth,cardHeight, 16, color, false)
      // Draw Name
      if(this.positions.indexOf(this.protagonist) == i){
-       context.fillStyle = "#80000080";
+       context.fillStyle = "#B0FF0080";
        context.font = "33px Sans Bold";
      }
      else{
@@ -357,12 +357,12 @@ class NewGame {
                        cardWidth,cardHeight, 16, color, false)
      // Draw Name
      if(this.protagonist == i){
-       context.fillStyle = "#80000080";
-       context.font = "33px Sans Bold";
+       context.fillStyle = "#B0FF0080";
+       context.font = "32px Sans Bold";
      }
      else{
        context.fillStyle = "#00000080";
-       context.font = "30px Sans";
+       context.font = "24px Sans";
      }
      var name = "Freier Platz"
      if(this.names[i]!=null){
