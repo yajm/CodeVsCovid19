@@ -271,30 +271,6 @@ class Table {
       ctx.stroke();
     }
   }
-
-  isClicked(x,y) {
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    var outlineWidth=4
-
-    var textOffset=10
-    var offsets = [
-      [0,offset],
-      [-offset,0],
-      [0,-offset],
-      [offset,0]
-    ]
-
-    for(var i = 0; i < 4; i++){
-      if(centerX+offsets[i][0] <= x && centerX+offsets[i][0]+cardWidth >= x &&
-        centerY+offsets[i][0] <= y && centerY+offsets[i][0]+cardHeight >= y){
-          return i;
-        }
-    }
-    return null
-  }
-
 }
 
 class NewGame {
