@@ -45,23 +45,7 @@
 					else if(!isset($_SESSION["game"]["player4"])) {
 						$GLOBALS["db"]->query("UPDATE game SET player4=?, turn=0 WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
 						$_SESSION["game"]["player4"] = $_SESSION["player"]["id"];
-
-						$global_cards = [];
-						for($i = 0; $i < 4; $i ++) {
-							$player_cards = [];
-							while(sizeof($player_cards) != 9) {
-								$randCard = rand(1, 36);
-
-								if(!in_array($randCard, $global_cards)) {
-									array_push($global_cards, $randCard);
-									array_push($player_cards, $randCard);
-								}
-							}
-
-							for($q = 0; $q < sizeof($player_cards); $q ++) {
-								$GLOBALS["db"]->query("INSERT INTO rel_inhand (player_id, card_num) VALUES (?, ?)", $_SESSION["game"]["player".($i + 1)], $player_cards[$q]);
-							}
-						}
+						$this->reShuffleCards();
 					}
 					else {
 						$res["error"] = "2552";
@@ -164,6 +148,15 @@
 							// Update turn
 							$player_position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["player"]["id"])[0]["position"];
 							$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $player_position, $_SESSION["game"]["id"]);
+
+							$cards = $GLOBALS["db"]->query("SELECT * FROM rel_inhand WHERE player_id=?", $_SESSION["player"]["id"]);
+							if(sizeof($cards)==0){
+								$GLOBALS["db"]->query("UPDATE game SET finished=1 WHERE id=?", $_SESSION["game"]["id"]);
+
+								for($i = 0; $i < 4; $i ++) {
+									$GLOBALS["db"]->query("UPDATE player SET ready=0 WHERE id=?", $_SESSION["game"]["player".($i + 1)]);
+								}
+							}
 						}
 
 					}
@@ -221,7 +214,6 @@
 								$res["errorstr"] = "First join a game before getting state of game";
 							}
 							else {
-								$res["hello"] = "got here";
 								$this->refreshGame();
 								$is_free=TRUE;
 								for($i = 0; $i < 4; $i ++) {
@@ -247,6 +239,7 @@
 									}
 								}
 								if($all_ready){
+									$this->reShuffleCards();
 									$GLOBALS["db"]->query("UPDATE game SET finished=0 WHERE id=?", $_SESSION["game"]["id"]);
 								}
 							}
@@ -274,6 +267,30 @@
 			}
 
 			echo json_encode($res);
+		}
+
+		function reShuffleCards(){
+			$this->refreshGame();
+			$global_cards = [];
+			for($i = 0; $i < 4; $i ++) {
+				$player_cards = [];
+				while(sizeof($player_cards) != 9) {
+					$randCard = rand(1, 36);
+
+					if(!in_array($randCard, $global_cards)) {
+						array_push($global_cards, $randCard);
+						array_push($player_cards, $randCard);
+					}
+				}
+
+				$GLOBALS["db"]->query("DELETE FROM rel_inhand WHERE player_id=?", $_SESSION["game"]["player".($i + 1)]);
+				$GLOBALS["db"]->query("DELETE FROM rel_stock WHERE player_id=?", $_SESSION["game"]["player".($i + 1)]);
+
+				for($q = 0; $q < sizeof($player_cards); $q ++) {
+					$GLOBALS["db"]->query("INSERT INTO rel_inhand (player_id, card_num) VALUES (?, ?)", $_SESSION["game"]["player".($i + 1)], $player_cards[$q]);
+				}
+			}
+			$this->refreshGame();
 		}
 
 		function makePlayer() {
