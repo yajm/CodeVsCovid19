@@ -221,7 +221,30 @@
 
 					$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $_GET["turn"], $_SESSION["game"]["id"]);
 					break;
+				case 'reset_game':
+					if(!isset($_SESSION["game"])) {
+						$res["error"] = "532";
+						$res["errorstr"] = "No game is running";
+					}
+					else{
+						$global_cards = [];
+						for($i = 0; $i < 4; $i ++) {
+							$player_cards = [];
+							while(sizeof($player_cards) != 9) {
+								$randCard = rand(1, 36);
 
+								if(!in_array($randCard, $global_cards)) {
+									array_push($global_cards, $randCard);
+									array_push($player_cards, $randCard);
+								}
+							}
+
+							for($q = 0; $q < sizeof($player_cards); $q ++) {
+								$GLOBALS["db"]->query("INSERT INTO rel_inhand (player_id, card_num) VALUES (?, ?)", $_SESSION["game"]["player".($i + 1)], $player_cards[$q]);
+							}
+						}
+					}
+					break;
 				default:
 					$res["error"] = "8568";
 					$res["errorstr"] = "Keine Action spezifiziert";
