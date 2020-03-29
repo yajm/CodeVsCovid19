@@ -224,11 +224,11 @@ class Table {
      // Draw Name
      if(this.positions.indexOf(this.protagonist) == i){
        context.fillStyle = "#B0FF0080";
-       context.font = "33px Sans Bold";
+       context.font = "32px Sans Bold";
      }
      else{
        context.fillStyle = "#00000080";
-       context.font = "30px Sans";
+       context.font = "24px Sans";
      }
 
      context.textBaseline = 'middle';
