@@ -174,7 +174,11 @@ class Table {
     ]
 
     context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
+<<<<<<< HEAD
                       2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth+80)
+=======
+                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth)
+>>>>>>> Choose place before game
 
   }
 
@@ -273,6 +277,29 @@ class Table {
   }
 
 }
+  isClicked(x,y) {
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+    var outlineWidth=4
+
+    var textOffset=10
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
+    for(var i = 0; i < 4; i++){
+      if(centerX+offsets[i][0] <= x && centerX+offsets[i][0]+cardWidth >= x &&
+        centerY+offsets[i][0] <= y && centerY+offsets[i][0]+cardHeight >= y){
+          return i;
+        }
+    }
+    return null
+  }
+
 }
 
 class NewGame {
@@ -280,6 +307,7 @@ class NewGame {
     this.relXPos = 0.8
     this.relYPos = 0.2
     this.relSize = 0.09
+<<<<<<< HEAD
 
     this.protagonist = null
     this.names = [null, null, null, null]
@@ -305,6 +333,33 @@ class NewGame {
     context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
                       2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80)
 
+=======
+
+    this.protagonist = null
+    this.names = [null, null, null, null]
+  }
+
+  clear(){
+    var c = document.getElementById("gameField");
+    var context = c.getContext('2d')
+
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+    var outlineWidth=4
+
+    var textOffset=10
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
+    context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
+                      2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80)
+
+>>>>>>> Choose place before game
   }
 
   draw(){
@@ -481,9 +536,15 @@ class Game{
         this.player.cards.splice(cardIndex,1)
         this.player.draw()
       }
+<<<<<<< HEAD
 
       console.log("claiming")
       console.log(this.table.isFull(), this.table.isClicked(x,y))
+=======
+
+      console.log("claimning")
+
+>>>>>>> Choose place before game
       if(this.table.isFull() && this.table.isClicked(x,y)){
         for(var i = 0; i < 4; i++){
           console.log("Table Cards:", this.table.cards[i])
@@ -521,6 +582,7 @@ function doPolling(game){
           game.room_name = data.game.room_name
           game.id=data.game.id
           game.finished=data.game.finished
+<<<<<<< HEAD
 
           game.player_ids = []
           game.table.names = []
@@ -533,6 +595,23 @@ function doPolling(game){
               }
           }
 
+=======
+
+          game.player_ids = [
+            data.players[0].id,
+            data.players[1].id,
+            data.players[2].id,
+            data.players[3].id
+          ]
+
+          game.table.names = [
+            data.players[0].name,
+            data.players[1].name,
+            data.players[2].name,
+            data.players[3].name
+          ]
+
+>>>>>>> Choose place before game
           if(!game.finished){
             for(var i = 0; i < 4; i++){
               if(data.players[i].last_card!= null){
@@ -562,7 +641,11 @@ function doPolling(game){
             game.newGame.names = [null, null, null]
 
             for(var i = 0; i < 4; i++){
+<<<<<<< HEAD
               if(data.players[i]!=null && data.players[i].ready){
+=======
+              if(data.players[i].ready){
+>>>>>>> Choose place before game
                 game.newGame.names[data.players[i].position] = data.players[i].name
                 if(i==protagonist_index){
                   game.newGame.protagonist = data.players[i].position
