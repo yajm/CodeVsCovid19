@@ -199,26 +199,28 @@ class Table {
     console.log("Positions",this.positions, this.protagonist,this.positions.indexOf(this.protagonist), this.names)
 
     for(var i = 0; i < 4; i++){
+      var color;
+
       if(this.turn == i){
         if(this.positions.indexOf(this.protagonist) == i){
-          context.fillStyle = "#FF000040";
+          color = "#B0FF000040";
         }
         else{
-          context.fillStyle = "#FF000020";
+          color = "#B0FF0020";
         }
       }
       else{
         if(this.positions.indexOf(this.protagonist) == i){
-          context.fillStyle = "#00000040";
+          color = "#00000040";
         }
         else{
-          context.fillStyle = "#00000020";
+          color = "#00000020";
         }
       }
       // Fill card holder
-      context.fillRect(centerX-outlineWidth+offsets[i][0],
+      roundRect(context, centerX-outlineWidth+offsets[i][0],
                        centerY-outlineWidth+offsets[i][1],
-                       cardWidth,cardHeight)
+                       cardWidth,cardHeight, 16, color, false)
      // Draw Name
      if(this.positions.indexOf(this.protagonist) == i){
        context.fillStyle = "#80000080";
@@ -241,39 +243,39 @@ class Table {
   }
 
   roundRect(ctx, x, y, width, height, radius, fill, stroke) {
-  if (typeof stroke === 'undefined') {
-    stroke = true;
-  }
-  if (typeof radius === 'undefined') {
-    radius = 10;
-  }
-  if (typeof radius === 'number') {
-    radius = {tl: radius, tr: radius, br: radius, bl: radius};
-  } else {
-    var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
-    for (var side in defaultRadius) {
-      radius[side] = radius[side] || defaultRadius[side];
-    }
-  }
-  ctx.beginPath();
-  ctx.moveTo(x + radius.tl, y);
-  ctx.lineTo(x + width - radius.tr, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-  ctx.lineTo(x + width, y + height - radius.br);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
-  ctx.lineTo(x + radius.bl, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
-  ctx.lineTo(x, y + radius.tl);
-  ctx.quadraticCurveTo(x, y, x + radius.tl, y);
-  ctx.closePath();
-  if (fill) {
-    ctx.fill();
-  }
-  if (stroke) {
-    ctx.stroke();
-  }
+      if (typeof stroke === 'undefined') {
+        stroke = true;
+      }
+      if (typeof radius === 'undefined') {
+        radius = 10;
+      }
+      if (typeof radius === 'number') {
+        radius = {tl: radius, tr: radius, br: radius, bl: radius};
+      } else {
+        var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+        for (var side in defaultRadius) {
+          radius[side] = radius[side] || defaultRadius[side];
+        }
+      }
+      ctx.beginPath();
+      ctx.moveTo(x + radius.tl, y);
+      ctx.lineTo(x + width - radius.tr, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+      ctx.lineTo(x + width, y + height - radius.br);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+      ctx.lineTo(x + radius.bl, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+      ctx.lineTo(x, y + radius.tl);
+      ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+      ctx.closePath();
+      if (fill) {
+        ctx.fill();
+      }
+      if (stroke) {
+        ctx.stroke();
+      }
 
-}
+  }
 }
 
 class NewGame {
@@ -332,26 +334,28 @@ class NewGame {
     context.fillText("Wo möchtest du sitzen?",centerX + offset/2,centerY+offset+cardHeight+30)
 
     for(var i = 0; i < 4; i++){
+      var color;
+
       if(this.protagonist == null){
           if(this.names[i] == null){
-            context.fillStyle = "#00FF0080"
+            color = "#B0FF0080"
           }
           else{
-            context.fillStyle = "#FF000080"
+            color = "#B0FF0080"
           }
       }
       else{
         if(this.protagonist == i){
-          context.fillStyle = "#00FF0020"
+          color = "#00FF0020"
         }
         else{
-          context.fillStyle = "#00000020"
+          color = "#00000020"
         }
       }
       // Fill card holder
-      context.fillRect(centerX+offsets[i][0],
+      this.roundRect(context, centerX+offsets[i][0],
                        centerY+offsets[i][1],
-                       cardWidth,cardHeight)
+                       cardWidth,cardHeight, 16, color, false)
      // Draw Name
      if(this.protagonist == i){
        context.fillStyle = "#80000080";
@@ -369,6 +373,41 @@ class NewGame {
      context.textAlign = 'center';
      context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
     }
+
+    roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+      if (typeof stroke === 'undefined') {
+        stroke = true;
+      }
+      if (typeof radius === 'undefined') {
+        radius = 10;
+      }
+      if (typeof radius === 'number') {
+        radius = {tl: radius, tr: radius, br: radius, bl: radius};
+      } else {
+        var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+        for (var side in defaultRadius) {
+          radius[side] = radius[side] || defaultRadius[side];
+        }
+      }
+      ctx.beginPath();
+      ctx.moveTo(x + radius.tl, y);
+      ctx.lineTo(x + width - radius.tr, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+      ctx.lineTo(x + width, y + height - radius.br);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+      ctx.lineTo(x + radius.bl, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+      ctx.lineTo(x, y + radius.tl);
+      ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+      ctx.closePath();
+      if (fill) {
+        ctx.fill();
+      }
+      if (stroke) {
+        ctx.stroke();
+      }
+
+  }
   }
 
   isClicked(x,y) {
