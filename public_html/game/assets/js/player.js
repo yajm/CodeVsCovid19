@@ -242,13 +242,13 @@ class Card{
     var c = document.getElementById("gameField");
     var ctx = c.getContext("2d");
     ctx.save();
-    this.roundedImage(x,y,this.width, this.height, 10);
+    this.roundedImage(ctx, x,y,this.width, this.height, 10);
     ctx.clip();
     ctx.drawImage(this.image,x,y,this.width, this.height);
     ctx.restore();
   }
 
-  roundedImage(x,y,width,height,radius){
+  roundedImage(ctx, x,y,width,height,radius){
       ctx.beginPath();
       ctx.moveTo(x + radius, y);
       ctx.lineTo(x + width - radius, y);
