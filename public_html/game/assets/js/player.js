@@ -391,7 +391,7 @@ class Card{
     ctx.restore();
   }
 
-  function roundedImage(x,y,width,height,radius){
+  roundedImage(x,y,width,height,radius){
       ctx.beginPath();
       ctx.moveTo(x + radius, y);
       ctx.lineTo(x + width - radius, y);
