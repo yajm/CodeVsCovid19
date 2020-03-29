@@ -34,6 +34,7 @@ function onSubmit() {
   var name = document.getElementById("name").value
   var room = document.getElementById("room").value
 
+
   $.post("api/?action=create_player&p_name="+name,
        function(data) {
          $.post("api/?action=join_game&room_name="+room,
