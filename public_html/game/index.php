@@ -24,7 +24,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
-<body>
+<body width="99%" height="99">
 <canvas id="gameField" width="2000" height="1000"></canvas>
 <iframe id="jitsi" allow="camera; microphone" src="<?php echo "https://meet.jit.si/coronajass".$_GET["id"];?>"></iframe>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
