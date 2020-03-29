@@ -240,8 +240,9 @@ class Table {
        this.cards[this.positions[i]].draw(centerX+offsets[i][0], centerY+offsets[i][1])
      }
     }
+  } 
 
-    roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+  roundRect(ctx, x, y, width, height, radius, fill, stroke) {
       if (typeof stroke === 'undefined') {
         stroke = true;
       }
@@ -273,8 +274,7 @@ class Table {
       if (stroke) {
         ctx.stroke();
       }
-    }
-  }  
+    } 
 }
 
 class NewGame {
