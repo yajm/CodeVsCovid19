@@ -61,8 +61,9 @@ class Player {
     this.game = game
     this.id = null
     this.cards = null
-    this.width=0.8
+    this.width=0.7
     this.relYPos=0.7
+    this.claimed_cards = []
   }
 
   displayCards() {
@@ -125,6 +126,24 @@ class Table {
     this.currentPlayer=playerIndex
   }
 
+  isFull(){
+    for(var i = 0; i < this.cards.length; i++){
+      if(this.cards[i] == null){
+        return false
+      }
+    }
+    return true
+  }
+
+  isEmpty(){
+    for(var i = 0; i < this.cards.length; i++){
+      if(this.cards[i] != null){
+        return false
+      }
+    }
+    return true
+  }
+
   isClicked(x,y) {
     var c = document.getElementById("gameField");
     var context = c.getContext('2d')
@@ -134,26 +153,26 @@ class Table {
     return centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y
   }
 
-  addCard(playerIndex, card){
-    if(this.full){
-      alert("Klicke auf die gespielten Karten um sie einzusammeln.")
-      return false
-    }
-    else if(playerIndex == this.currentPlayer){
-      this.cards[playerIndex] = card
-      this.draw()
-      this.currentPlayer = (this.currentPlayer+1)%4
+  clear(){
+    var c = document.getElementById("gameField");
+    var context = c.getContext('2d')
 
-      if(this.cards[0] != null && this.cards[1] != null &&
-        this.cards[2] != null && this.cards[3] != null){
-          this.full=true
-        }
-      return true
-    }
-    else{
-      alert("Du bist nicht am Zug!")
-      return false
-    }
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+    var outlineWidth=4
+
+    var textOffset=10
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
+    context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
+                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth)
+
   }
 
   draw(){
@@ -173,8 +192,7 @@ class Table {
       [offset,0]
     ]
 
-    context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
-                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth)
+    this.clear()
 
     for(var i = 0; i < 4; i++){
       if(this.turn == i){
@@ -198,7 +216,6 @@ class Table {
                        centerY-outlineWidth+offsets[i][1],
                        cardWidth,cardHeight)
      // Draw Name
-     console.log(this.protagonist, this.protagonist==i)
      if(this.protagonist == i){
        context.fillStyle = "#80000080";
        context.font = "33px Sans Bold";
@@ -217,10 +234,157 @@ class Table {
      }
     }
   }
+
+  isClicked(x,y) {
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+    var outlineWidth=4
+
+    var textOffset=10
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
+    for(var i = 0; i < 4; i++){
+      if(centerX+offsets[i][0] <= x && centerX+offsets[i][0]+cardWidth >= x &&
+        centerY+offsets[i][0] <= y && centerY+offsets[i][0]+cardHeight >= y){
+          return i;
+        }
+    }
+    return null
+  }
+
 }
 
-class Card{
+class NewGame {
+  constructor(){
+    this.relXPos = 0.8
+    this.relYPos = 0.2
+    this.relSize = 0.09
 
+    this.protagonist = null
+    this.names = [null, null, null, null]
+  }
+
+  clear(){
+    var c = document.getElementById("gameField");
+    var context = c.getContext('2d')
+
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+    var outlineWidth=4
+
+    var textOffset=10
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
+    context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
+                      2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80)
+
+  }
+
+  draw(){
+    var c = document.getElementById("gameField");
+    var context = c.getContext('2d')
+
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
+    this.clear()
+
+    context.fillStyle = "#00000080";
+    context.font = "30px Sans";
+    context.textBaseline = 'middle';
+    context.textAlign = 'center';
+    context.fillText("Wo möchtest du sitzen?",centerX + offset/2,centerY+offset+cardHeight+30)
+
+    for(var i = 0; i < 4; i++){
+      if(this.protagonist == null){
+          if(this.names[i] == null){
+            context.fillStyle = "#00FF0080"
+          }
+          else{
+            context.fillStyle = "#FF000080"
+          }
+      }
+      else{
+        if(this.protagonist == i){
+          context.fillStyle = "#00FF0020"
+        }
+        else{
+          context.fillStyle = "#00000020"
+        }
+      }
+      // Fill card holder
+      context.fillRect(centerX+offsets[i][0],
+                       centerY+offsets[i][1],
+                       cardWidth,cardHeight)
+     // Draw Name
+     if(this.protagonist == i){
+       context.fillStyle = "#80000080";
+       context.font = "33px Sans Bold";
+     }
+     else{
+       context.fillStyle = "#00000080";
+       context.font = "30px Sans";
+     }
+     var name = "Freier Platz"
+     if(this.names[i]!=null){
+       name = this.names[i]
+     }
+     context.textBaseline = 'middle';
+     context.textAlign = 'center';
+     context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
+    }
+  }
+
+  isClicked(x,y) {
+    var c = document.getElementById("gameField");
+    var context = c.getContext('2d')
+
+    var centerX = c.width*this.relXPos
+    var centerY = c.height*this.relYPos
+    var offset = c.width*this.relSize
+    var outlineWidth=4
+
+    var textOffset=10
+    var offsets = [
+      [0,offset],
+      [-offset,0],
+      [0,-offset],
+      [offset,0]
+    ]
+
+    for(var i = 0; i < 4; i++){
+      if(centerX+offsets[i][0] <= x && centerX+offsets[i][0]+cardWidth >= x &&
+        centerY+offsets[i][1] <= y && centerY+offsets[i][1]+cardHeight >= y){
+          return i;
+        }
+    }
+    return null
+  }
+
+}
+
+
+class Card{
   constructor(index){
     this.index = index
     this.x = 0
@@ -232,7 +396,6 @@ class Card{
 
     this.image = cardImages[index]
     this.loaded = false
-
   }
 
 
@@ -254,10 +417,12 @@ class Game{
   constructor(){
     this.table = new Table(0)
     this.player = new Player(this,0)
+    this.newGame = new NewGame()
     this.room_name=null
     this.id=null
     this.player_ids=null
     this.turn=3
+    this.finished=false
   }
 
   updatePlayerCards(cards){
@@ -270,27 +435,46 @@ class Game{
   }
 
   clicked(x,y) {
-    console.log(this.player_ids, this.turn, this.player.id, this.player.cards)
-    var cardIndex = this.player.clicked(x,y)
-    if(cardIndex != null){
-      $.getJSON("../api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
-        function (data) {
-          console.log("Play",data)
+    if(!this.finished){
+      console.log("Not finished")
+      var cardIndex = this.player.clicked(x,y)
+      if(cardIndex != null){
+        $.getJSON("../api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
+          function (data) {
+            console.log("Play",data)
+          }
+        )
+        this.table.cards[this.turn] = this.player.cards[cardIndex]
+        this.player.cards.splice(cardIndex,1)
+        this.player.draw()
+      }
+
+      console.log("claimning")
+
+      if(this.table.isFull() && this.table.isClicked(x,y)){
+        for(var i = 0; i < 4; i++){
+          console.log("Table Cards:", this.table.cards[i])
+          this.player.claimed_cards.push(this.table.cards[i].index)
+          this.table.cards[i] == null
         }
-      )
-      this.table.cards[this.turn] = this.player.cards[cardIndex]
-      this.player.cards.splice(cardIndex,1)
-      this.player.draw()
+        $.getJSON("../api/?action=claim",
+          function (data) {
+            console.log("Claimed",data)
+          }
+        )
+      }
     }
-
-    console.log("claimning")
-
-    if(this.table.isClicked(x,y)){
-      $.getJSON("../api/?action=claim",
-        function (data) {
-          console.log("Claimed",data)
-        }
-      )
+    else{
+      var loc = this.newGame.isClicked(x,y)
+      console.log("loc",loc)
+      if(loc != null){
+        console.log("api, sit")
+        $.getJSON("../api/?action=sit&position="+loc,
+          function (data) {
+            console.log("Sit",data)
+          }
+        )
+      }
     }
   }
 }
@@ -298,22 +482,12 @@ class Game{
 function doPolling(game){
   $.getJSON("../api/?action=game_state",
       function(data) {
-        console.log(data)
+        console.log("GAME POLL:", data)
         if(data.error==-1){
-          for(var i = 0; i < 4; i++){
-            if(data.players[i].last_card!= null){
-              game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
-            }
-            else{
-              game.table.cards[i] = null
-            }
-          }
-          //console.log("Game Table",game.table)
-          game.table.draw()
-
           game.table.turn = data.game.turn
           game.room_name = data.game.room_name
           game.id=data.game.id
+          game.finished=data.game.finished
 
           game.player_ids = [
             data.players[0].id,
@@ -329,18 +503,43 @@ function doPolling(game){
             data.players[3].name
           ]
 
-          game.player.id = Number(data.protagonist)
-          game.table.protagonist = game.player_ids.indexOf(game.player.id)
-
-          var player_cards = data.players[game.player_ids.indexOf(game.player.id)].cards
-
-          if(player_cards.size==0 && game.table.cards[0] == null &&
-              game.table.cards[1] == null && game.table.cards[2] == null &&
-              game.table.cards[3] == null){
-                // Game is finished
+          if(!game.finished){
+            for(var i = 0; i < 4; i++){
+              if(data.players[i].last_card!= null){
+                game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
               }
+              else{
+                game.table.cards[i] = null
+              }
+            }
+            //console.log("Game Table",game.table)
+            game.table.draw()
+
+            game.player.id = Number(data.protagonist)
+            game.table.protagonist = game.player_ids.indexOf(game.player.id)
+            var player_cards = data.players[game.player_ids.indexOf(game.player.id)].cards
+            console.log()
+            game.updatePlayerCards(player_cards)
+
+          }
           else{
-            game.updatePlayerCards(data.players[game.player_ids.indexOf(game.player.id)].cards)
+            game.player.id = Number(data.protagonist)
+
+            var protagonist_index = game.player_ids.indexOf(game.player.id)
+            var claimed_cards = data.players[game.player_ids.indexOf(game.player.id)].claimed
+            game.updatePlayerCards(claimed_cards)
+
+            game.newGame.names = [null, null, null]
+
+            for(var i = 0; i < 4; i++){
+              if(data.players[i].ready){
+                game.newGame.names[data.players[i].position] = data.players[i].name
+                if(i==protagonist_index){
+                  game.newGame.protagonist = data.players[i].position
+                }
+              }
+            }
+            game.newGame.draw()
           }
         }
         setTimeout(function(){doPolling(game)},500);
