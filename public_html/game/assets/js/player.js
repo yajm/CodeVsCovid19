@@ -115,6 +115,7 @@ class Table {
     this.currentPlayer = startPlayer
     this.cards = [null, null, null, null]
     this.names = ["", "", "", ""]
+    this.positions = [0,1,2,3]
     this.turn=0
     this.protagonist=0
     this.full=false
@@ -145,11 +146,13 @@ class Table {
   }
 
   isClicked(x,y) {
+    console.log("Ckicked on Me")
     var c = document.getElementById("gameField");
     var context = c.getContext('2d')
     var centerX = c.width*this.relXPos
     var centerY = c.height*this.relYPos
     var offset = c.width*this.relSize
+    console.log(x,y,centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y)
     return centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y
   }
 
@@ -171,7 +174,7 @@ class Table {
     ]
 
     context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
-                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth)
+                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth+80)
 
   }
 
@@ -196,7 +199,7 @@ class Table {
 
     for(var i = 0; i < 4; i++){
       if(this.turn == i){
-        if(this.protagonist == i){
+        if(this.positions[this.protagonist] == i){
           context.fillStyle = "#FF000040";
         }
         else{
@@ -204,7 +207,7 @@ class Table {
         }
       }
       else{
-        if(this.protagonist == i){
+        if(this.positions[this.protagonist]  == i){
           context.fillStyle = "#00000040";
         }
         else{
@@ -216,7 +219,7 @@ class Table {
                        centerY-outlineWidth+offsets[i][1],
                        cardWidth,cardHeight)
      // Draw Name
-     if(this.protagonist == i){
+     if(this.positions[this.protagonist]  == i){
        context.fillStyle = "#80000080";
        context.font = "33px Sans Bold";
      }
@@ -224,40 +227,17 @@ class Table {
        context.fillStyle = "#00000080";
        context.font = "30px Sans";
      }
+
      context.textBaseline = 'middle';
      context.textAlign = 'center';
-     context.fillText(this.names[i],centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
+     context.fillText(this.names[this.positions[i]],centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
 
      // Draw Card
-     if(this.cards[i] != null){
-       this.cards[i].draw(centerX+offsets[i][0], centerY+offsets[i][1])
+     if(this.cards[this.positions[i]] != null){
+       this.cards[this.positions[i]].draw(centerX+offsets[i][0], centerY+offsets[i][1])
      }
     }
   }
-
-  isClicked(x,y) {
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    var outlineWidth=4
-
-    var textOffset=10
-    var offsets = [
-      [0,offset],
-      [-offset,0],
-      [0,-offset],
-      [offset,0]
-    ]
-
-    for(var i = 0; i < 4; i++){
-      if(centerX+offsets[i][0] <= x && centerX+offsets[i][0]+cardWidth >= x &&
-        centerY+offsets[i][0] <= y && centerY+offsets[i][0]+cardHeight >= y){
-          return i;
-        }
-    }
-    return null
-  }
-
 }
 
 class NewGame {
@@ -449,8 +429,8 @@ class Game{
         this.player.draw()
       }
 
-      console.log("claimning")
-
+      console.log("claiming")
+      console.log(this.table.isFull(), this.table.isClicked(x,y))
       if(this.table.isFull() && this.table.isClicked(x,y)){
         for(var i = 0; i < 4; i++){
           console.log("Table Cards:", this.table.cards[i])
@@ -501,6 +481,13 @@ function doPolling(game){
             data.players[1].name,
             data.players[2].name,
             data.players[3].name
+          ]
+
+          game.table.positions = [
+            data.players[0].position,
+            data.players[1].position,
+            data.players[2].position,
+            data.players[3].position
           ]
 
           if(!game.finished){

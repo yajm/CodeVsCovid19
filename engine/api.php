@@ -162,11 +162,8 @@
 								$GLOBALS["db"]->query("UPDATE player SET last_card=null WHERE id=?", $_SESSION["game"]["player".($i + 1)]);
 							}
 							// Update turn
-							for($i = 0; $i < 4; $i ++) {
-								if($_SESSION["game"]["player".($i + 1)]==$_SESSION["player"]["id"]){
-									$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $i, $_SESSION["game"]["id"]);
-								}
-							}
+							$player_position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["player"]["id"])[0]["position"];
+							$GLOBALS["db"]->query("UPDATE game SET turn = ? WHERE id=?", $player_position, $_SESSION["game"]["id"]);
 						}
 
 					}
@@ -182,15 +179,6 @@
 					}
 					else{
 						$this->refreshGame();
-						$player_id = 0;
-						for($i = 0; $i < 4; $i ++) {
-							if($_SESSION["game"]["player".($i + 1)]==$_SESSION["player"]["id"]){
-								$player_id = $i;
-							}
-						}
-						$turn = $GLOBALS["db"]->query("SELECT turn FROM game WHERE id=?", $_SESSION["game"]["id"])[0]["turn"];
-						$res["player_id"] = $player_id;
-						$res["turn"] = $turn;
 
 						$all_played=TRUE;
 						$res["lastcards"]=[0,0,0,0];
@@ -202,7 +190,10 @@
 							}
 						}
 
-						if($player_id!=$turn){
+						$player_position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["player"]["id"])[0]["position"];
+						$turn = $GLOBALS["db"]->query("SELECT turn FROM game WHERE id=?", $_SESSION["game"]["id"])[0]["turn"];
+
+						if($player_position!=$turn){
 							$res["error"] = "624";
 							$res["errorstr"] = "It's not you'r turn!";
 						}
