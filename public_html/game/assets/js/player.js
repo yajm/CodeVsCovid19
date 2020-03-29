@@ -240,7 +240,7 @@ class Table {
        this.cards[this.positions[i]].draw(centerX+offsets[i][0], centerY+offsets[i][1])
      }
     }
-  } 
+  }
 
   roundRect(ctx, x, y, width, height, radius, fill, stroke) {
       if (typeof stroke === 'undefined') {
@@ -274,7 +274,7 @@ class Table {
       if (stroke) {
         ctx.stroke();
       }
-    } 
+    }
 }
 
 class NewGame {
@@ -318,9 +318,9 @@ class NewGame {
     var offset = c.width*this.relSize
 
     var offsets = [
-      [0,offset],
-      [-offset,0],
       [0,-offset],
+      [-offset,0],
+      [0,offset],
       [offset,0]
     ]
 
@@ -371,6 +371,9 @@ class NewGame {
      context.textBaseline = 'middle';
      context.textAlign = 'center';
      context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
+     if(i==0){
+       context.fillText("(Start Spieler)",centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+30+offsets[i][1])
+     }
     }
   }
 
@@ -420,9 +423,9 @@ class NewGame {
 
     var textOffset=10
     var offsets = [
-      [0,offset],
-      [-offset,0],
       [0,-offset],
+      [-offset,0],
+      [0,offset],
       [offset,0]
     ]
 

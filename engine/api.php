@@ -241,6 +241,7 @@
 								if($all_ready){
 									$this->reShuffleCards();
 									$GLOBALS["db"]->query("UPDATE game SET finished=0 WHERE id=?", $_SESSION["game"]["id"]);
+									$GLOBALS["db"]->query("UPDATE game SET turn=0 WHERE id=?", $_SESSION["game"]["id"]);
 								}
 							}
 				break;
