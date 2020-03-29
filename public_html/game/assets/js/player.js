@@ -629,7 +629,6 @@ function doPolling(game){
    });
 }
 
-
 const supports_backdrop_filter = (function() {
   const style = document.createElement('_').style;
   style.cssText = 'backdrop-filter: blur(2px);-webkit-backdrop-filter: blur(2px);';
@@ -637,18 +636,7 @@ const supports_backdrop_filter = (function() {
     (document.documentMode === undefined || document.documentMode > 9);
 })();
 
-const mouse = {
-  x: 0,
-  y: 0,
-  dirty: false
-};
-const vid = document.querySelector('video');
-const canvas = document.getElementById('gameField');
-let playing = false;
-const ctx = canvas.getContext('2d');
-const spread = 10;
-const border_width = 1; // because we add a css border around the canvas element
-  
+
 document.querySelector('.container')
   .addEventListener('mousemove', (evt) => {
   mouse.x = evt.offsetX;
@@ -664,12 +652,6 @@ document.querySelector('.container')
   mouse.dirty = true;
 });
 
-function move() {
-  canvas.style.left = (mouse.x - 25) + 'px';
-  canvas.style.top = (mouse.y - 25) + 'px';
-  mouse.dirty = false;
-}
-
 // unsupporting browsers 
 if( !supports_backdrop_filter ) {
   ctx.filter = 'blur(' + spread + 'px)';
@@ -678,23 +660,6 @@ if( !supports_backdrop_filter ) {
   vid.onpause = stopDrawing;
 }
 
-function startDrawing() {
-  playing = true;
-  loop();
-}
-function stopDrawing() {
-  playing = false;
-}
-
-function loop() {
-  if( mouse.dirty ) {
-    move();
-  }
-  draw();
-  if( playing ) {
-    requestAnimationFrame(loop);
-  }
-}
 function draw() {
   const vid_rect = vid.getBoundingClientRect();
   const can_rect = canvas.getBoundingClientRect();
