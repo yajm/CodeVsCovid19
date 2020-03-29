@@ -42,7 +42,7 @@
   <br>
   <br>
   <div>
-    <button class="button" onclick="onSubmit()">Join Game</button>
+    <button class="button" onclick="onSubmit()">Spiel beitreten</button>
   </div>
 </div>
 <div class="topRight">

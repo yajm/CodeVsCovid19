@@ -459,7 +459,7 @@ class Card{
     var c = document.getElementById("gameField");
     var ctx = c.getContext("2d");
     ctx.save();
-    this.roundedImage(ctx, x,y,this.width, this.height, 10);
+    this.roundedImage(ctx, x,y,this.width, this.height, 24);
     ctx.clip();
     ctx.drawImage(this.image,x,y,this.width, this.height);
     ctx.restore();
