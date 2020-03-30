@@ -203,10 +203,10 @@ class Table {
 
       if(this.turn == i){
         if(this.positions.indexOf(this.protagonist) == i){
-          color = "#FF000040";
+          color = "#F4CD3E40";
         }
         else{
-          color = "#FF000020";
+          color = "#F4CD3E20";
         }
       }
       else{
@@ -226,8 +226,8 @@ class Table {
                        cardWidth,cardHeight, 16, color, false);
      // Draw Name
      if(this.positions.indexOf(this.protagonist) == i){
-       context.fillStyle = "#80000080";
-       context.font = "32px Sans Bold";
+       context.fillStyle = "#688F4E80";
+       context.font = "28px Sans Bold";
      }
      else{
        context.fillStyle = "#00000080";
@@ -332,15 +332,15 @@ class NewGame {
 
       if(this.protagonist == null){
           if(this.names[i] == null){
-            color = "#00FF0080"
+            color = "#B1D18280"
           }
           else{
-            color = "#FF000080"
+            color = "#F4CD3E80"
           }
       }
       else{
         if(this.protagonist == i){
-          color = "#00FF0020"
+          color = "#B1D18220"
         }
         else{
           color = "#00000020"
@@ -354,8 +354,8 @@ class NewGame {
                        cardWidth,cardHeight, 16, color, false)
      // Draw Name
      if(this.protagonist == i){
-       context.fillStyle = "#80000080";
-       context.font = "32px Sans Bold";
+       context.fillStyle = "#688F4E80";
+       context.font = "28px Sans Bold";
      }
      else{
        context.fillStyle = "#00000080";
