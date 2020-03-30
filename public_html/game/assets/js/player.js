@@ -189,9 +189,9 @@ class Table {
 
     var textOffset=10
     var offsets = [
-      [0,-offset],
-      [-offset,0],
       [0,offset],
+      [-offset,0],
+      [0,-offset],
       [offset,0]
     ]
 
@@ -420,9 +420,9 @@ class NewGame {
 
     var textOffset=10
     var offsets = [
-      [0,-offset],
-      [-offset,0],
       [0,offset],
+      [-offset,0],
+      [0,-offset],
       [offset,0]
     ]
 
