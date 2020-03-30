@@ -221,7 +221,7 @@ class Table {
       // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag
       // Fill card holder
       context.fillStyle = color;
-      roundRect(context, centerX-outlineWidth+offsets[i][0],
+      this.roundRect(context, centerX-outlineWidth+offsets[i][0],
                        centerY-outlineWidth+offsets[i][1],
                        cardWidth,cardHeight, 16, color, false);
      // Draw Name
