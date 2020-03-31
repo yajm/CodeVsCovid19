@@ -58,7 +58,6 @@ if(isset($_POST['submit'])){
 	</head>
 	<body class="is-preload">
 		<div class="parent">
-<div class="corona">
 <div class="pageCenter">
 		<h2>Kontakt / Support Anfrage</h2>
 				<form method="post" action="#">
