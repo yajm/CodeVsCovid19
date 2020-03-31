@@ -59,10 +59,13 @@ if(isset($_POST['submit'])){
 	<body>
 		<div class="parent">
 			<div class="corona">
-<img src="game/assets/images/corona.png" alt="" width="128px">
+<img src="../game/assets/images/corona.png" alt="" width="128px">
 </div>
 <div class="pageCenter">
+	<div>
 		<h2>Kontakt / Support Anfrage</h2>
+	</div>
+		
 		<br>
 							<br>
 							<br>
@@ -78,6 +81,7 @@ if(isset($_POST['submit'])){
 							<br>
 							<br>
 							<br>
+							<div>
 				<form method="post" action="#">
 					
 							<input type="text" name="name" id="name" value="" placeholder="Name" />
@@ -94,6 +98,7 @@ if(isset($_POST['submit'])){
 							<br>
 							<button class="button" type="submit" name="submit">Senden</button>		
 				</form>	
+			</div>
 			</div>
 		</div>
 		<div class="topRight">
