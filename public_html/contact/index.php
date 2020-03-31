@@ -56,29 +56,30 @@ if(isset($_POST['submit'])){
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="../game/assets/css/style.css">
 	</head>
-	<body class="is-preload">
+	<body>
 		<div class="parent">
 			<div class="corona">
 <img src="game/assets/images/corona.png" alt="" width="128px">
 </div>
 <div class="pageCenter">
 		<h2>Kontakt / Support Anfrage</h2>
+		<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
 				<form method="post" action="#">
-					<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
+					
 							<input type="text" name="name" id="name" value="" placeholder="Name" />
 							<span class="error"> <?php echo $nameErr;?></span>
 							<br>
@@ -87,7 +88,7 @@ if(isset($_POST['submit'])){
 							<span class="error"> <?php echo $emailErr;?></span>
 							<br>
 							<br>
-							<textarea name="textarea" id="textarea" placeholder="Frage zu Coronajass.ch\n\n Bei Supportanfrage am besten Skype Namen auch angeben" rows="6"></textarea>
+							<textarea name="textarea" id="textarea" placeholder="Frage zu Coronajass.ch \\ Bei Supportanfrage am besten Skype Namen auch angeben" rows="6"></textarea>
 							<span class="error"> <?php echo $messageErr;?></span>
 							<br>
 							<br>
@@ -95,5 +96,20 @@ if(isset($_POST['submit'])){
 				</form>	
 			</div>
 		</div>
+		<div class="topRight">
+<font size="7" color="white">
+<b>#CodeVsCOVID19</b>
+</font>
+</div>
+
+<div class="bottomRight">
+<font size="2" color="white">
+Made by:<br>
+<a href="https://kastgroup.com">Patrice Kast</a><br>
+<a href="https://n.ethz.ch/~pascscha/">Pascal Sch&auml;rli</a><br>
+<a href="https://yajm.ch">Yannick M&uuml;ller</a>
+</font>
+</div>
+</div>
 	</body>
 </html>
