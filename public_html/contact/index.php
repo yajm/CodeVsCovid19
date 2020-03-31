@@ -61,6 +61,14 @@ if(isset($_POST['submit'])){
 <div class="pageCenter">
 		<h2>Kontakt / Support Anfrage</h2>
 				<form method="post" action="#">
+					<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
 							<input type="text" name="name" id="name" value="" placeholder="Name" />
 							<span class="error"> <?php echo $nameErr;?></span>
 							<br>
