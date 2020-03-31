@@ -51,7 +51,6 @@
   </div>
   <br>
   <br>
-  Wir bieten gerne noch Support an, da alles Neu ist.
   <div>
     <button class="button" onclick="window.location ='/contact';">Kontakt / Support Anfrage</button>
   </div>

@@ -61,26 +61,14 @@ if(isset($_POST['submit'])){
 			<div class="corona">
 <img src="../game/assets/images/corona.png" alt="" width="128px">
 </div>
-<div class="pageCenter">
+<div class="contactCenter">
 	<div>
 		<h2>Kontakt / Support Anfrage</h2>
 	</div>
 		
 		<br>
 							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
+							
 							<div>
 				<form method="post" action="#">
 					
