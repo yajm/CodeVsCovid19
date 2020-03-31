@@ -44,6 +44,17 @@
   <div>
     <button class="button" onclick="onSubmit()">Spiel beitreten</button>
   </div>
+  <br>
+  <br>
+  <div>
+    <button class="button" onclick="window.location ='/anleitung';">Anleitung</button>
+  </div>
+  <br>
+  <br>
+  Wir bieten gerne noch Support an, da alles Neu ist.
+  <div>
+    <button class="button" onclick="window.location ='/contact';">Kontakt / Support Anfrage</button>
+  </div>
 </div>
 <div class="topRight">
 <font size="7" color="white">

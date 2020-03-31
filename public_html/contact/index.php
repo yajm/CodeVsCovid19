@@ -24,7 +24,7 @@ if(isset($_POST['submit'])){
     $headers2 = "From:" . $to; # "passcha@student.ethz.ch"
     mail($to,$subject,$message,$headers);
     mail($from,$subject2,$message2,$headers2); // sends a copy of the message to the sender
-    header('Location: /thanks');
+    header('Location: /');
 	}
 }
 ?>
@@ -57,42 +57,26 @@ if(isset($_POST['submit'])){
   <link rel="stylesheet" type="text/css" href="../game/assets/css/style.css">
 	</head>
 	<body class="is-preload">
-
-		<!-- Heading -->
-			<div id="mail" >
+		<div class="parent">
+<div class="corona">
+<div class="pageCenter">
+		<h2>Kontakt / Support Anfrage</h2>
+				<form method="post" action="#">
+							<input type="text" name="name" id="name" value="" placeholder="Name" />
+							<span class="error"> <?php echo $nameErr;?></span>
+							<br>
+							<br>
+							<input type="email" name="email" id="email" value="" placeholder="Email" />
+							<span class="error"> <?php echo $emailErr;?></span>
+							<br>
+							<br>
+							<textarea name="textarea" id="textarea" placeholder="Frage zu Coronajass.ch" rows="6"></textarea>
+							<span class="error"> <?php echo $messageErr;?></span>
+							<br>
+							<br>
+							<button class="button" type="submit" name="submit">Senden</button>		
+				</form>	
 			</div>
-		<!-- Form -->
-		<section id="main" class="wrapper">
-			<div class="inner">
-				<header class="special">
-						<h2>Contact</h2>
-					</header>
-					<div class="content">
-									<form method="post" action="#">
-										<div class="row gtr-uniform">
-											<div class="col-6 col-12-xsmall">
-												<input type="text" name="name" id="name" value="" placeholder="Name" />
-												<span class="error"> <?php echo $nameErr;?></span>
-											</div>
-											<div class="col-6 col-12-xsmall">
-												<input type="email" name="email" id="email" value="" placeholder="Email" />
-												<span class="error"> <?php echo $emailErr;?></span>
-											</div>
-											<div class="col-12">
-												<textarea name="textarea" id="textarea" placeholder="Question about the Solar House" rows="6"></textarea>
-												<span class="error"> <?php echo $messageErr;?></span>
-											</div>
-											<!-- Break -->
-											<div class="col-12">
-												<ul class="actions">
-													<li><input type="submit" name="submit" value="Submit Form" class="primary" /></li>
-													<li><input type="reset" value="Reset" /></li>
-												</ul>
-											</div>
-										</div>
-									</form>	
-								</div>
-							</div>
-			</section>
+		</div>
 	</body>
 </html>
