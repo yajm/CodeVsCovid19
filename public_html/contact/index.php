@@ -17,7 +17,7 @@ if(isset($_POST['submit'])){
     $name = $_POST['name'];
     $subject = "Contact - Submission";
     $subject2 = "Submission on coronajass.ch";
-    $message = $name . " with the E-Mail: " . $from . " wrote the following:" . "\n\n" . $_POST['textarea'] . "\n\n"
+    $message = $name . " with the E-Mail: " . $from . " wrote the following:" . "\n\n" . $_POST['textarea'] . "\n\n";
     $message2 = "Mail sent: " . $name . "\n\n" . $_POST['textarea'] . "\n\nI will contact you shortly.";
 
     $headers = "From:" . $from; # "pas.schaerli@sunrise.ch"
