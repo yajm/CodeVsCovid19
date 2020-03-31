@@ -58,10 +58,20 @@ if(isset($_POST['submit'])){
 	</head>
 	<body class="is-preload">
 		<div class="parent">
+			<div class="corona">
+<img src="game/assets/images/corona.png" alt="" width="128px">
+</div>
 <div class="pageCenter">
 		<h2>Kontakt / Support Anfrage</h2>
 				<form method="post" action="#">
 					<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
 							<br>
 							<br>
 							<br>
@@ -77,7 +87,7 @@ if(isset($_POST['submit'])){
 							<span class="error"> <?php echo $emailErr;?></span>
 							<br>
 							<br>
-							<textarea name="textarea" id="textarea" placeholder="Frage zu Coronajass.ch" rows="6"></textarea>
+							<textarea name="textarea" id="textarea" placeholder="Frage zu Coronajass.ch\n\n Bei Supportanfrage am besten Skype Namen auch angeben" rows="6"></textarea>
 							<span class="error"> <?php echo $messageErr;?></span>
 							<br>
 							<br>
