@@ -27,32 +27,49 @@
 
 			switch ($_GET["action"]) {
 				case 'create_player':
-					$this->makePlayer();
-					$res["player"] = $_SESSION["player"];
+					if(!isset($_SESSION["player"])){
+						// Create new player if none exist yet
+						$this->makePlayer();
+						$res["player"] = $_SESSION["player"];
+					}
+					else{
+						// Otherwise just change player name
+						$GLOBALS["db"]->query("UPDATE player SET name=? WHERE  id=?", $_GET["p_name"], $_SESSION["player"]["id"]);
+						$_SESSION["player"]["name"] = $_GET["p_name"];
+						$res["player"] = $_SESSION["player"];
+					}
 					break;
-
 				case 'join_game':
 					$this->getGame();
-					if(!isset($_SESSION["game"]["player1"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player1=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-					}
-					else if(!isset($_SESSION["game"]["player2"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player2=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-					}
-					else if(!isset($_SESSION["game"]["player3"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player3=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-					}
-					else if(!isset($_SESSION["game"]["player4"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player4=?, turn=0 WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-						$_SESSION["game"]["player4"] = $_SESSION["player"]["id"];
-						$this->reShuffleCards();
-					}
-					else {
-						$res["error"] = "2552";
-						$res["errorstr"] = "Game Room is full";
-					}
-					break;
 
+					$alreadyJoined = FALSE;
+					for($i = 0; $i < 4; $i ++) {
+						if($_SESSION["player"]["id"] == $_SESSION["game"]["player".($i + 1)]){
+							$alreadyJoined = TRUE;
+						}
+					}
+
+					if(!$alreadyJoined){
+						if(!isset($_SESSION["game"]["player1"])) {
+							$GLOBALS["db"]->query("UPDATE game SET player1=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+						}
+						else if(!isset($_SESSION["game"]["player2"])){
+							$GLOBALS["db"]->query("UPDATE game SET player2=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+						}
+						else if(!isset($_SESSION["game"]["player3"])) {
+							$GLOBALS["db"]->query("UPDATE game SET player3=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+						}
+						else if(!isset($_SESSION["game"]["player4"])) {
+							$GLOBALS["db"]->query("UPDATE game SET player4=?, turn=0 WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+							$_SESSION["game"]["player4"] = $_SESSION["player"]["id"];
+							$this->reShuffleCards();
+						}
+						else {
+							$res["error"] = "2552";
+							$res["errorstr"] = "Game Room is full";
+						}
+					}
+				break;
 				case 'game_state':
 					if(!isset($_SESSION["player"])) {
 						$res["error"] = "74";

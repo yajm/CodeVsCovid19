@@ -540,6 +540,7 @@ function doPolling(game){
   try{
     $.getJSON("../api/?action=game_state",
         function(data) {
+          console.log(data)
           if(data.error==-1){
             game.table.turn = data.game.turn
             game.room_name = data.game.room_name
