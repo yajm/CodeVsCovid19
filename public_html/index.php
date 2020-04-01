@@ -47,12 +47,12 @@
   <br>
   <br>
   <div>
-    <button class="button" onclick="window.location ='/anleitung';">Anleitung</button>
+    <button class="scondarybutton" onclick="window.location ='/anleitung';">Anleitung</button>
   </div>
   <br>
   <br>
   <div>
-    <button class="button" onclick="window.location ='/contact';">Kontakt / Support Anfrage</button>
+    <button class="scondarybutton" onclick="window.location ='/contact';">Kontakt / Support Anfrage</button>
   </div>
 </div>
 <div class="topRight">
