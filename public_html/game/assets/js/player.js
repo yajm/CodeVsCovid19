@@ -146,13 +146,11 @@ class Table {
   }
 
   isClicked(x,y) {
-    console.log("Ckicked on Me")
     var c = document.getElementById("gameField");
     var context = c.getContext('2d')
     var centerX = c.width*this.relXPos
     var centerY = c.height*this.relYPos
     var offset = c.width*this.relSize
-    console.log(x,y,centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y)
     return centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y
   }
 
@@ -196,7 +194,6 @@ class Table {
     ]
 
     this.clear()
-    console.log("Positions",this.positions, this.protagonist,this.positions.indexOf(this.protagonist), this.names)
 
     for(var i = 0; i < 4; i++){
       var color;
@@ -508,43 +505,31 @@ class Game{
 
   clicked(x,y) {
     if(!this.finished){
-      console.log("Not finished")
       var cardIndex = this.player.clicked(x,y)
       if(cardIndex != null){
         $.getJSON("../api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
-          function (data) {
-            console.log("Play",data)
-          }
+          function (data) {}
         )
         this.table.cards[this.turn] = this.player.cards[cardIndex]
         this.player.cards.splice(cardIndex,1)
         this.player.draw()
       }
 
-      console.log("claiming")
-      console.log(this.table.isFull(), this.table.isClicked(x,y))
       if(this.table.isFull() && this.table.isClicked(x,y)){
         for(var i = 0; i < 4; i++){
-          console.log("Table Cards:", this.table.cards[i])
           this.player.claimed_cards.push(this.table.cards[i].index)
           this.table.cards[i] == null
         }
         $.getJSON("../api/?action=claim",
-          function (data) {
-            console.log("Claimed",data)
-          }
+          function (data) {}
         )
       }
     }
     else{
       var loc = this.newGame.isClicked(x,y)
-      console.log("loc",loc)
       if(loc != null){
-        console.log("api, sit")
         $.getJSON("../api/?action=sit&position="+loc,
-          function (data) {
-            console.log("Sit",data)
-          }
+          function (data) {}
         )
       }
     }
@@ -552,75 +537,76 @@ class Game{
 }
 
 function doPolling(game){
-  $.getJSON("../api/?action=game_state",
-      function(data) {
-        console.log("GAME POLL:", data)
-        if(data.error==-1){
-          game.table.turn = data.game.turn
-          game.room_name = data.game.room_name
-          game.id=data.game.id
-          game.finished=data.game.finished
+  try{
+    $.getJSON("../api/?action=game_state",
+        function(data) {
+          if(data.error==-1){
+            game.table.turn = data.game.turn
+            game.room_name = data.game.room_name
+            game.id=data.game.id
+            game.finished=data.game.finished
 
-          game.player_ids = []
-          game.table.names = []
-          game.table.positions = [0,0,0,0]
-          for(var i = 0; i < 4; i++){
-              if(data.players[i] != null){
-                game.player_ids.push(data.players[i].id)
-                game.table.names.push(data.players[i].name)
-                game.table.positions[data.players[i].position]=i
-              }
-          }
-
-          if(!game.finished){
+            game.player_ids = []
+            game.table.names = []
+            game.table.positions = [0,0,0,0]
             for(var i = 0; i < 4; i++){
-              if(data.players[i].last_card!= null){
-                game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
-              }
-              else{
-                game.table.cards[i] = null
-              }
-            }
-            //console.log("Game Table",game.table)
-            game.table.draw()
-
-            game.player.id = Number(data.protagonist)
-            game.table.protagonist = game.player_ids.indexOf(game.player.id)
-            var index = game.player_ids.indexOf(game.player.id)
-            console.log(game.player_ids,game.player.id, index)
-            if(index != -1){
-              game.updatePlayerCards(data.players[index].cards)
-            }
-            else{
-              game.updatePlayerCards([])
+                if(data.players[i] != null){
+                  game.player_ids.push(data.players[i].id)
+                  game.table.names.push(data.players[i].name)
+                  game.table.positions[data.players[i].position]=i
+                }
             }
 
-          }
-          else{
-            game.player.id = Number(data.protagonist)
-            var index = game.player_ids.indexOf(game.player.id)
-            console.log(game.player_ids,game.player.id, index)
-            if(index != -1){
-              game.updatePlayerCards(data.players[index].claimed)
-            }
-            else{
-              game.updatePlayerCards([])
-            }
-            game.newGame.names = [null, null, null]
-
-            for(var i = 0; i < 4; i++){
-              if(data.players[i]!=null && data.players[i].ready){
-                game.newGame.names[data.players[i].position] = data.players[i].name
-                if(i==index){
-                  game.newGame.protagonist = data.players[i].position
+            if(!game.finished){
+              for(var i = 0; i < 4; i++){
+                if(data.players[i].last_card!= null){
+                  game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
+                }
+                else{
+                  game.table.cards[i] = null
                 }
               }
+              game.table.draw()
+
+              game.player.id = Number(data.protagonist)
+              game.table.protagonist = game.player_ids.indexOf(game.player.id)
+              var index = game.player_ids.indexOf(game.player.id)
+              if(index != -1){
+                game.updatePlayerCards(data.players[index].cards)
+              }
+              else{
+                game.updatePlayerCards([])
+              }
+
             }
-            game.newGame.draw()
+            else{
+              game.player.id = Number(data.protagonist)
+              var index = game.player_ids.indexOf(game.player.id)
+              if(index != -1){
+                game.updatePlayerCards(data.players[index].claimed)
+              }
+              else{
+                game.updatePlayerCards([])
+              }
+              game.newGame.names = [null, null, null]
+
+              for(var i = 0; i < 4; i++){
+                if(data.players[i]!=null && data.players[i].ready){
+                  game.newGame.names[data.players[i].position] = data.players[i].name
+                  if(i==index){
+                    game.newGame.protagonist = data.players[i].position
+                  }
+                }
+              }
+              game.newGame.draw()
+            }
           }
-        }
-        setTimeout(function(){doPolling(game)},500);
-   });
+     });
+   }
+   catch (e){
+     console.log(e)
+   }
+   setTimeout(function(){doPolling(game)},500);
 }
 
 // const supports_backdrop_filter = (function() {
@@ -630,7 +616,7 @@ function doPolling(game){
 //     (document.documentMode === undefined || document.documentMode > 9);
 // })();
 
-// // unsupporting browsers 
+// // unsupporting browsers
 // if( !supports_backdrop_filter ) {
 //   ctx.filter = 'blur(' + spread + 'px)';
 
@@ -654,7 +640,7 @@ function doPolling(game){
 //   ctx.drawImage(
 //     vid,
 //     (s_x - offset) / ratio_x, (s_y - offset) / ratio_y, output_w  / ratio_x, output_h / ratio_y,
-//     -offset, -offset, output_w, output_h 
+//     -offset, -offset, output_w, output_h
 //   );
 // }
 
