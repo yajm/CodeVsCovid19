@@ -192,17 +192,24 @@ class Table {
                        cardWidth,cardHeight, 16, color, false);
      // Draw Name;
      if(this.positions.indexOf(this.protagonist) == i){
-       context.fillStyle = "#688F4E80";
-       context.font = "28px Sans Bold";
+        context.fillStyle = "#68CF4E"
+        context.strokeStyle = "#00000040"
+        context.font = "35px Sans Bold";
      }
      else{
-       context.fillStyle = "#00000080";
-       context.font = "24px Sans";
+        context.fillStyle = "#FFFFFFE0"
+        context.strokeStyle = "#00000040"
+        context.font = "30px Sans";
      }
 
+     var name = this.names[this.positions[i]]
+     if(name.length > 10){
+        name = name.substring(0,8)+"..."
+     }
      context.textBaseline = 'middle';
      context.textAlign = 'center';
-     context.fillText(this.names[this.positions[i]],centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1]);
+     context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1]);
+     context.strokeText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1]);
 
      // Draw Card;
      if(this.cards[this.positions[i]] != null){
