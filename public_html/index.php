@@ -32,12 +32,12 @@
 </div>
 <div class="pageCenter">
   <div>
-    <input name="room" id="room" value="<?php echo $_GET["id"];?>" placeholder="Your Room">
+    <input class="textfield" name="room" id="room" value="<?php echo $_GET["id"];?>" placeholder="Your Room">
   </div>
   <br>
   <br>
   <div>
-    <input name="name" id="name" placeholder="Your Name">
+    <input class="textfield" name="name" id="name" placeholder="Your Name">
   </div>
   <br>
   <br>

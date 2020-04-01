@@ -78,11 +78,16 @@ a {
   left: 5%;
 }
 
+.textfield {
+  width: 500px;
+}
+
 .button {
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
+  width: 500px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
