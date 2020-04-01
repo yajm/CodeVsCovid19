@@ -6,42 +6,10 @@ $.ajaxSetup({
 
 
 cardFiles = [
-  "assets/images/b6.jpg",
-  "assets/images/b7.jpg",
-  "assets/images/b8.jpg",
-  "assets/images/b9.jpg",
-  "assets/images/b0.jpg",
-  "assets/images/b1.jpg",
-  "assets/images/b2.jpg",
-  "assets/images/b3.jpg",
-  "assets/images/b4.jpg",
-  "assets/images/e6.jpg",
-  "assets/images/e7.jpg",
-  "assets/images/e8.jpg",
-  "assets/images/e9.jpg",
-  "assets/images/e0.jpg",
-  "assets/images/e1.jpg",
-  "assets/images/e2.jpg",
-  "assets/images/e3.jpg",
-  "assets/images/e4.jpg",
-  "assets/images/r6.jpg",
-  "assets/images/r7.jpg",
-  "assets/images/r8.jpg",
-  "assets/images/r9.jpg",
-  "assets/images/r0.jpg",
-  "assets/images/r1.jpg",
-  "assets/images/r2.jpg",
-  "assets/images/r3.jpg",
-  "assets/images/r4.jpg",
-  "assets/images/s6.jpg",
-  "assets/images/s7.jpg",
-  "assets/images/s8.jpg",
-  "assets/images/s9.jpg",
-  "assets/images/s0.jpg",
-  "assets/images/s1.jpg",
-  "assets/images/s2.jpg",
-  "assets/images/s3.jpg",
-  "assets/images/s4.jpg"
+  "b6",  "b7",  "b8",  "b9",  "b0",  "b1",  "b2",  "b3", "b4",
+  "e6",  "e7",  "e8",  "e9",  "e0",  "e1",  "e2",  "e3", "e4",
+  "r6",  "r7",  "r8",  "r9",  "r0",  "r1",  "r2",  "r3",  "r4",
+  "s6",  "s7",  "s8",  "s9",  "s0",  "s1",  "s2",  "s3",  "s4"
 ]
 
 cardImages = [];
@@ -51,7 +19,7 @@ cardHeight = 250;
 
 for(var i = 0; i < cardFiles.length; i++){
   var image = new Image();
-  image.src = cardFiles[i];
+  image.src = "assets/images/"+cardFiles[i]+".jpg";
   cardImages.push(image);
 }
 
@@ -87,6 +55,7 @@ class Player {
       context.clearRect(left,posy,cardWidth,cardHeight);
     }
 
+    console.log(this.cards)
     for (var i = 0; i < this.cards.length; i++){
       var card = this.cards[i];
       var posx = left + i*spacing;
@@ -482,6 +451,11 @@ class Card{
 
 }
 
+function sortNumber(a, b) {
+  return a - b;
+}
+
+
 class Game{
   constructor(){
     this.table = new Table(0);
@@ -495,7 +469,7 @@ class Game{
   }
 
   updatePlayerCards(cards){
-    cards.sort();
+    cards.sort(sortNumber);
     this.player.cards = [];
     for(var i = 0; i < cards.length; i++){
       this.player.cards.push(new Card(cards[i]-1));
