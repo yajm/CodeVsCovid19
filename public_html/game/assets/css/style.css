@@ -79,7 +79,11 @@ a {
 }
 
 .textfield {
-  width: 500px;
+  width: 256px;
+}
+
+.textfieldlong {
+  width: 512px;
 }
 
 .button {
@@ -87,7 +91,7 @@ a {
   border: none;
   color: white;
   padding: 15px 32px;
-  width: 500px;
+  width: 256px;
   text-align: center;
   text-decoration: none;
   display: inline-block;

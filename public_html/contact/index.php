@@ -72,15 +72,15 @@ if(isset($_POST['submit'])){
 							<div>
 				<form method="post" action="#">
 					
-							<input type="text" name="name" id="name" value="" placeholder="Name" />
+							<input class="textfieldlong" type="text" name="name" id="name" value="" placeholder="Name" />
 							<span class="error"> <?php echo $nameErr;?></span>
 							<br>
 							<br>
-							<input type="email" name="email" id="email" value="" placeholder="Email" />
+							<input class="textfieldlong" type="email" name="email" id="email" value="" placeholder="Email" />
 							<span class="error"> <?php echo $emailErr;?></span>
 							<br>
 							<br>
-							<textarea name="textarea" id="textarea" placeholder="Frage zu Coronajass.ch \\ Bei Supportanfrage am besten Skype Namen auch angeben" rows="6"></textarea>
+							<textarea class="textfieldlong" name="textarea" id="textarea" placeholder="Frage zu Coronajass.ch \\ Bei Supportanfrage am besten Skype Namen auch angeben" rows="6"></textarea>
 							<span class="error"> <?php echo $messageErr;?></span>
 							<br>
 							<br>
