@@ -63,7 +63,9 @@ if(isset($_POST['submit'])){
 </div>
 <div class="contactCenter">
 	<div>
-		<h2>Kontakt / Support Anfrage</h2>
+    <font size="6" color="white">
+		Kontakt / Support Anfrage
+  </font>
 	</div>
 		
 		<br>
