@@ -95,16 +95,21 @@ function onSubmit() {
       function(data) {
       $.post("api/?action=create_player&p_name="+name,
            function(data) {
-             $.post("api/?action=join_game&room_name="+room,
-              function(data){
-                $.getJSON("api/?action=game_state",
-                     function(data) {
-                       console.log(data)
-                       window.location = "game?id="+room
-                     })
-              })
-       })
-  })
+              $.getJSON("api/?action=join_game&room_name="+room,
+                function(data){
+                  if(data["error"]=="2552"){
+                    alert("Room "+room+" is already full, please choose another room.")
+                  }
+                  else{
+                  $.getJSON("api/?action=game_state",
+                       function(data) {
+                         console.log(data)
+                         window.location = "game?id="+room
+                       })
+                  }
+                })
+        })
+    })
 }
 
 </script>
