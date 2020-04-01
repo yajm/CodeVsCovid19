@@ -140,7 +140,7 @@ class Table {
       [offset,0]
     ];
 
-    context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
+    context.clearRect(centerX-offset-outlineWidth-2, centerY-offset-outlineWidth-2,
                       2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth+80);
 
   }
@@ -165,35 +165,41 @@ class Table {
     this.clear();
 
     for(var i = 0; i < 4; i++){
-      var color;
+      var fillColor;
+      var strokeColor;
 
       if(this.turn == i){
         if(this.positions.indexOf(this.protagonist) == i){
-          color = "#F4CD3E40";
+          fillColor = "#F4CD3E40";
+          strokeColor = "#FFFFFF40";
         }
         else{
-          color = "#F4CD3E20";
+          fillColor = "#F4CD3E20";
+          strokeColor = "#FFFFFF";
         }
       }
       else{
         if(this.positions.indexOf(this.protagonist) == i){
-          color = "#00000040";
+          fillColor = "#00000040";
+          strokeColor = "#FFFFFF40";
         }
         else{
-          color = "#00000020";
+          fillColor = "#00000020";
+          strokeColor = "#FFFFFF20";
         }
       }
 
       // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag;
       // Fill card holder;
-      context.fillStyle = color;
+      context.fillStyle = fillColor;
+      context.strokeStyle = strokeColor;
       this.roundRect(context, centerX-outlineWidth+offsets[i][0],
                        centerY-outlineWidth+offsets[i][1],
-                       cardWidth,cardHeight, 16, color, false);
+                       cardWidth,cardHeight, 16, true, true);
      // Draw Name;
      if(this.positions.indexOf(this.protagonist) == i){
-        context.fillStyle = "#68CF4E"
-        context.strokeStyle = "#00000040"
+        context.fillStyle = "#FFFFFFE0"
+        context.strokeStyle = "#00FF0040"
         context.font = "35px Sans Bold";
      }
      else{
@@ -272,8 +278,8 @@ class NewGame {
     var offset = c.width*this.relSize;
     var outlineWidth=4;
 
-    context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
-                      2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80);
+    context.clearRect(centerX-offset-outlineWidth-40, centerY-offset-outlineWidth-40,
+                      2*offset+cardWidth+2*outlineWidth+40, 2*offset+cardHeight+2*outlineWidth+80);
 
   }
 
