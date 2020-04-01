@@ -23,7 +23,7 @@
   <meta name="msapplication-config" content="game/assets/favicon/browserconfig.xml">
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="game/assets/css/style.css">
-</head>  
+</head>
 
 <body>
 <div class="parent">
@@ -37,7 +37,7 @@
   <br>
   <br>
   <div>
-    <input class="textfield" name="name" id="name" placeholder="Your Name">
+    <input class="textfield" name="name" id="name" value="" placeholder="Your Name">
   </div>
   <br>
   <br>
@@ -75,11 +75,17 @@ Made by:<br>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script>
-  $.ajaxSetup({
-      xhrFields: {
-        withCredentials: true
-      }
-    });
+$.ajaxSetup({
+    xhrFields: {
+      withCredentials: true
+    }
+  });
+
+$.getJSON("api/?action=get_name",
+  function(data){
+    console.log(data)
+    document.getElementById("name").value = data["name"]
+  });
 
 function onSubmit() {
   var name = document.getElementById("name").value

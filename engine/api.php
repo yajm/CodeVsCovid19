@@ -101,7 +101,9 @@
 						}
 					}
 					break;
-
+				case 'get_name':
+					$res["name"] = $_SESSION["player"]["name"];
+					break;
 				case 'my_cards':
 					# echo "Session:<br>";
 					# echo '<pre>';
