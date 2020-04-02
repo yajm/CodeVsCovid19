@@ -83,10 +83,14 @@ a {
 }
 
 .textfield {
+  padding: 5px 10px;
+  border-radius: 8px;
   width: 256px;
 }
 
 .textfieldlong {
+  padding: 5px 10px;
+  border-radius: 8px;
   width: 512px;
 }
 
@@ -102,11 +106,6 @@ a {
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
-}
-
-.input {
-  padding: 5px 10px;
-  border-radius: 8px;
 }
 
 .scondarybutton {
