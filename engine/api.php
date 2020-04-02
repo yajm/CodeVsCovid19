@@ -27,32 +27,49 @@
 
 			switch ($_GET["action"]) {
 				case 'create_player':
-					$this->makePlayer();
-					$res["player"] = $_SESSION["player"];
+					if(!isset($_SESSION["player"])){
+						// Create new player if none exist yet
+						$this->makePlayer();
+						$res["player"] = $_SESSION["player"];
+					}
+					else{
+						// Otherwise just change player name
+						$GLOBALS["db"]->query("UPDATE player SET name=? WHERE  id=?", $_GET["p_name"], $_SESSION["player"]["id"]);
+						$_SESSION["player"]["name"] = $_GET["p_name"];
+						$res["player"] = $_SESSION["player"];
+					}
 					break;
-
 				case 'join_game':
 					$this->getGame();
-					if(!isset($_SESSION["game"]["player1"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player1=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-					}
-					else if(!isset($_SESSION["game"]["player2"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player2=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-					}
-					else if(!isset($_SESSION["game"]["player3"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player3=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-					}
-					else if(!isset($_SESSION["game"]["player4"])) {
-						$GLOBALS["db"]->query("UPDATE game SET player4=?, turn=0 WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
-						$_SESSION["game"]["player4"] = $_SESSION["player"]["id"];
-						$this->reShuffleCards();
-					}
-					else {
-						$res["error"] = "2552";
-						$res["errorstr"] = "Game Room is full";
-					}
-					break;
 
+					$alreadyJoined = FALSE;
+					for($i = 0; $i < 4; $i ++) {
+						if($_SESSION["player"]["id"] == $_SESSION["game"]["player".($i + 1)]){
+							$alreadyJoined = TRUE;
+						}
+					}
+
+					if(!$alreadyJoined){
+						if(!isset($_SESSION["game"]["player1"])) {
+							$GLOBALS["db"]->query("UPDATE game SET player1=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+						}
+						else if(!isset($_SESSION["game"]["player2"])){
+							$GLOBALS["db"]->query("UPDATE game SET player2=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+						}
+						else if(!isset($_SESSION["game"]["player3"])) {
+							$GLOBALS["db"]->query("UPDATE game SET player3=? WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+						}
+						else if(!isset($_SESSION["game"]["player4"])) {
+							$GLOBALS["db"]->query("UPDATE game SET player4=?, turn=0 WHERE id=?", $_SESSION["player"]["id"], $_SESSION["game"]["id"]);
+							$_SESSION["game"]["player4"] = $_SESSION["player"]["id"];
+							$this->reShuffleCards();
+						}
+						else {
+							$res["error"] = "2552";
+							$res["errorstr"] = "Game Room is full";
+						}
+					}
+				break;
 				case 'game_state':
 					if(!isset($_SESSION["player"])) {
 						$res["error"] = "74";
@@ -84,7 +101,9 @@
 						}
 					}
 					break;
-
+				case 'get_name':
+					$res["name"] = $_SESSION["player"]["name"];
+					break;
 				case 'my_cards':
 					# echo "Session:<br>";
 					# echo '<pre>';
@@ -214,34 +233,47 @@
 								$res["errorstr"] = "First join a game before getting state of game";
 							}
 							else {
-								$this->refreshGame();
-								$is_free=TRUE;
+
+								$joined = FALSE;
 								for($i = 0; $i < 4; $i ++) {
-									$ready = $GLOBALS["db"]->query("SELECT ready FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["ready"];
-									if($ready){
-										$position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["position"];
-										if($position==$_GET["position"]){
-											$res["occupied"]=$i;
-											$is_free=FALSE;
+									if($_SESSION["player"]["id"] == $_SESSION["game"]["player".($i + 1)]){
+										$joined = TRUE;
+									}
+								}
+								if(!$joined){
+									$res["error"] = "18";
+									$res["errorstr"] = "You are not part of this game";
+								}
+								else{
+									$this->refreshGame();
+									$is_free=TRUE;
+									for($i = 0; $i < 4; $i ++) {
+										$ready = $GLOBALS["db"]->query("SELECT ready FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["ready"];
+										if($ready){
+											$position = $GLOBALS["db"]->query("SELECT position FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["position"];
+											if($position==$_GET["position"]){
+												$res["occupied"]=$i;
+												$is_free=FALSE;
+											}
 										}
 									}
-								}
-								if($is_free){
-									$GLOBALS["db"]->query("UPDATE player SET position=? WHERE id=?", $_GET["position"], $_SESSION["player"]["id"]);
-									$GLOBALS["db"]->query("UPDATE player SET ready=? WHERE id=?", 1, $_SESSION["player"]["id"]);
-								}
-
-								$all_ready=TRUE;
-								for($i = 0; $i < 4; $i ++) {
-									$ready = $GLOBALS["db"]->query("SELECT ready FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["ready"];
-									if(!$ready){
-										$all_ready=FALSE;
+									if($is_free){
+										$GLOBALS["db"]->query("UPDATE player SET position=? WHERE id=?", $_GET["position"], $_SESSION["player"]["id"]);
+										$GLOBALS["db"]->query("UPDATE player SET ready=? WHERE id=?", 1, $_SESSION["player"]["id"]);
 									}
-								}
-								if($all_ready){
-									$this->reShuffleCards();
-									$GLOBALS["db"]->query("UPDATE game SET finished=0 WHERE id=?", $_SESSION["game"]["id"]);
-									$GLOBALS["db"]->query("UPDATE game SET turn=0 WHERE id=?", $_SESSION["game"]["id"]);
+
+									$all_ready=TRUE;
+									for($i = 0; $i < 4; $i ++) {
+										$ready = $GLOBALS["db"]->query("SELECT ready FROM player WHERE id=?", $_SESSION["game"]["player".($i + 1)])[0]["ready"];
+										if(!$ready){
+											$all_ready=FALSE;
+										}
+									}
+									if($all_ready){
+										$this->reShuffleCards();
+										$GLOBALS["db"]->query("UPDATE game SET finished=0 WHERE id=?", $_SESSION["game"]["id"]);
+										$GLOBALS["db"]->query("UPDATE game SET turn=0 WHERE id=?", $_SESSION["game"]["id"]);
+									}
 								}
 							}
 				break;

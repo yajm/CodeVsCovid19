@@ -6,241 +6,220 @@ $.ajaxSetup({
 
 
 cardFiles = [
-  "assets/images/b6.jpg",
-  "assets/images/b7.jpg",
-  "assets/images/b8.jpg",
-  "assets/images/b9.jpg",
-  "assets/images/b0.jpg",
-  "assets/images/b1.jpg",
-  "assets/images/b2.jpg",
-  "assets/images/b3.jpg",
-  "assets/images/b4.jpg",
-  "assets/images/e6.jpg",
-  "assets/images/e7.jpg",
-  "assets/images/e8.jpg",
-  "assets/images/e9.jpg",
-  "assets/images/e0.jpg",
-  "assets/images/e1.jpg",
-  "assets/images/e2.jpg",
-  "assets/images/e3.jpg",
-  "assets/images/e4.jpg",
-  "assets/images/r6.jpg",
-  "assets/images/r7.jpg",
-  "assets/images/r8.jpg",
-  "assets/images/r9.jpg",
-  "assets/images/r0.jpg",
-  "assets/images/r1.jpg",
-  "assets/images/r2.jpg",
-  "assets/images/r3.jpg",
-  "assets/images/r4.jpg",
-  "assets/images/s6.jpg",
-  "assets/images/s7.jpg",
-  "assets/images/s8.jpg",
-  "assets/images/s9.jpg",
-  "assets/images/s0.jpg",
-  "assets/images/s1.jpg",
-  "assets/images/s2.jpg",
-  "assets/images/s3.jpg",
-  "assets/images/s4.jpg"
+  "b6",  "b7",  "b8",  "b9",  "b0",  "b1",  "b2",  "b3", "b4",
+  "e6",  "e7",  "e8",  "e9",  "e0",  "e1",  "e2",  "e3", "e4",
+  "r6",  "r7",  "r8",  "r9",  "r0",  "r1",  "r2",  "r3",  "r4",
+  "s6",  "s7",  "s8",  "s9",  "s0",  "s1",  "s2",  "s3",  "s4"
 ]
 
-cardImages = []
+cardImages = [];
 
-cardWidth = 175
-cardHeight=250
+cardWidth = 175;
+cardHeight = 250;
 
 for(var i = 0; i < cardFiles.length; i++){
-  var image = new Image()
-  image.src = cardFiles[i]
-  cardImages.push(image)
+  var image = new Image();
+  image.src = "assets/images/"+cardFiles[i]+".jpg";
+  cardImages.push(image);
 }
 
 
 class Player {
   constructor(game) {
-    this.game = game
-    this.id = null
-    this.cards = null
-    this.width=0.7
-    this.relYPos=0.7
-    this.claimed_cards = []
+    this.game = game;
+    this.id = null;
+    this.cards = null;
+    this.width=0.7;
+    this.relYPos=0.7;
+    this.claimed_cards = [];
   }
 
   displayCards() {
-    document.getElementById('cardHolder').innerHTML = this.toString()
+    document.getElementById('cardHolder').innerHTML = this.toString();
   }
 
   draw() {
     var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
+    var context = c.getContext('2d');
 
-    var width = this.width * c.width
-    var posy = c.height * this.relYPos
-    var spacing = width/this.cards.length
+    var width = this.width * c.width;
+    var posy = c.height * this.relYPos;
+    var spacing = width/this.cards.length;
 
-    var left = (c.width - width) / 2
+    var left = (c.width - width) / 2;
 
     if(this.cards.length > 0){
-      context.clearRect(left,posy,(this.cards.length)*spacing+this.cards[0].width,this.cards[0].height)
+      context.clearRect(left,posy,(this.cards.length)*spacing+this.cards[0].width,this.cards[0].height);
     }
     else{
-      context.clearRect(left,posy,cardWidth,cardHeight)
+      context.clearRect(left,posy,cardWidth,cardHeight);
     }
 
+    console.log(this.cards)
     for (var i = 0; i < this.cards.length; i++){
-      var card = this.cards[i]
-      var posx = left + i*spacing
-      card.draw(posx,posy,1)
+      var card = this.cards[i];
+      var posx = left + i*spacing;
+      card.draw(posx,posy,1);
     }
   }
 
   clicked(x,y) {
     for (var i = 0; i < this.cards.length; i++){
-      var card = this.cards[i]
+      var card = this.cards[i];
       if(this.cards[i].isClicked(x,y)){
-        return i
+        return i;
         }
       }
-    return null
+    return null;
   }
 
 }
 
 class Table {
   constructor(startPlayer){
-    this.relXPos = 0.8
-    this.relYPos = 0.2
-    this.relSize = 0.07
+    this.relXPos = 0.8;
+    this.relYPos = 0.2;
+    this.relSize = 0.07;
 
-    this.currentPlayer = startPlayer
-    this.cards = [null, null, null, null]
-    this.names = ["", "", "", ""]
-    this.positions = [0,1,2,3]
-    this.turn=0
-    this.protagonist=0
-    this.full=false
+    this.currentPlayer = startPlayer;
+    this.cards = [null, null, null, null];
+    this.names = ["", "", "", ""];
+    this.positions = [0,1,2,3];
+    this.turn=0;
+    this.protagonist=0;
+    this.full=false;
   }
 
   claim(playerIndex){
-    this.cards = [null, null, null, null]
-    this.full=false
-    this.currentPlayer=playerIndex
+    this.cards = [null, null, null, null];
+    this.full=false;
+    this.currentPlayer=playerIndex;
   }
 
   isFull(){
     for(var i = 0; i < this.cards.length; i++){
       if(this.cards[i] == null){
-        return false
+        return false;
       }
     }
-    return true
+    return true;
   }
 
   isEmpty(){
     for(var i = 0; i < this.cards.length; i++){
       if(this.cards[i] != null){
-        return false
+        return false;
       }
     }
-    return true
+    return true;
   }
 
   isClicked(x,y) {
-    console.log("Ckicked on Me")
     var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    console.log(x,y,centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y)
-    return centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y
+    var context = c.getContext('2d');
+    var centerX = c.width*this.relXPos;
+    var centerY = c.height*this.relYPos;
+    var offset = c.width*this.relSize;
+    return centerX-offset <= x && centerX+offset >= x &&  centerY-offset <= y && centerY+offset >= y;
   }
 
   clear(){
     var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
+    var context = c.getContext('2d');
 
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    var outlineWidth=4
+    var centerX = c.width*this.relXPos;
+    var centerY = c.height*this.relYPos;
+    var offset = c.width*this.relSize;
+    var outlineWidth=4;
 
-    var textOffset=10
+    var textOffset=10;
     var offsets = [
       [0,-offset],
       [-offset,0],
       [0,offset],
       [offset,0]
-    ]
+    ];
 
-    context.clearRect(centerX-offset-outlineWidth, centerY-offset-outlineWidth,
-                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth+80)
+    context.clearRect(centerX-offset-outlineWidth-2, centerY-offset-outlineWidth-2,
+                      2*offset+cardWidth+2*outlineWidth, 2*offset+cardHeight+2*outlineWidth+80);
 
   }
 
   draw(){
     var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
+    var context = c.getContext('2d');
 
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    var outlineWidth=4
+    var centerX = c.width*this.relXPos;
+    var centerY = c.height*this.relYPos;
+    var offset = c.width*this.relSize;
+    var outlineWidth=4;
 
-    var textOffset=10
+    var textOffset=10;
     var offsets = [
       [0,-offset],
       [-offset,0],
       [0,offset],
       [offset,0]
-    ]
+    ];
 
-    this.clear()
-    console.log("Positions",this.positions, this.protagonist,this.positions.indexOf(this.protagonist), this.names)
+    this.clear();
 
     for(var i = 0; i < 4; i++){
-      var color;
+      var fillColor;
+      var strokeColor;
 
       if(this.turn == i){
         if(this.positions.indexOf(this.protagonist) == i){
-          color = "#F4CD3E40";
+          fillColor = "#F4CD3E40";
+          strokeColor = "#FFFFFF40";
         }
         else{
-          color = "#F4CD3E20";
+          fillColor = "#F4CD3E20";
+          strokeColor = "#FFFFFF";
         }
       }
       else{
         if(this.positions.indexOf(this.protagonist) == i){
-          color = "#00000040";
+          fillColor = "#00000040";
+          strokeColor = "#FFFFFF40";
         }
         else{
-          color = "#00000020";
+          fillColor = "#00000020";
+          strokeColor = "#FFFFFF20";
         }
       }
 
-      // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag
-      // Fill card holder
-      context.fillStyle = color;
+      // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag;
+      // Fill card holder;
+      context.fillStyle = fillColor;
+      context.strokeStyle = strokeColor;
       this.roundRect(context, centerX-outlineWidth+offsets[i][0],
                        centerY-outlineWidth+offsets[i][1],
-                       cardWidth,cardHeight, 16, color, false);
-     // Draw Name
+                       cardWidth,cardHeight, 16, true, true);
+     // Draw Name;
      if(this.positions.indexOf(this.protagonist) == i){
-       context.fillStyle = "#688F4E80";
-       context.font = "28px Sans Bold";
+        context.fillStyle = "#FFFFFFE0"
+        context.strokeStyle = "#00FF0040"
+        context.font = "35px Sans Bold";
      }
      else{
-       context.fillStyle = "#00000080";
-       context.font = "24px Sans";
+        context.fillStyle = "#FFFFFFE0"
+        context.strokeStyle = "#00000040"
+        context.font = "30px Sans";
      }
 
+     var name = this.names[this.positions[i]]
+     if(name.length > 10){
+        name = name.substring(0,8)+"..."
+     }
      context.textBaseline = 'middle';
      context.textAlign = 'center';
-     context.fillText(this.names[this.positions[i]],centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
+     context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1]);
+     context.strokeText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1]);
 
-     // Draw Card
+     // Draw Card;
      if(this.cards[this.positions[i]] != null){
-       this.cards[this.positions[i]].draw(centerX+offsets[i][0], centerY+offsets[i][1])
+       this.cards[this.positions[i]].draw(centerX+offsets[i][0], centerY+offsets[i][1]);
      }
     }
   }
@@ -282,50 +261,50 @@ class Table {
 
 class NewGame {
   constructor(){
-    this.relXPos = 0.8
-    this.relYPos = 0.2
-    this.relSize = 0.07
+    this.relXPos = 0.8;
+    this.relYPos = 0.2;
+    this.relSize = 0.07;
 
-    this.protagonist = null
-    this.names = [null, null, null, null]
+    this.protagonist = null;
+    this.names = [null, null, null, null];
   }
 
   clear(){
     var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
+    var context = c.getContext('2d');
 
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    var outlineWidth=4
+    var centerX = c.width*this.relXPos;
+    var centerY = c.height*this.relYPos;
+    var offset = c.width*this.relSize;
+    var outlineWidth=4;
 
-    context.clearRect(centerX-offset-outlineWidth-30, centerY-offset-outlineWidth-30,
-                      2*offset+cardWidth+2*outlineWidth+30, 2*offset+cardHeight+2*outlineWidth+80)
+    context.clearRect(centerX-offset-outlineWidth-40, centerY-offset-outlineWidth-40,
+                      2*offset+cardWidth+2*outlineWidth+40, 2*offset+cardHeight+2*outlineWidth+80);
 
   }
 
   draw(){
     var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
+    var context = c.getContext('2d');
 
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
+    var centerX = c.width*this.relXPos;
+    var centerY = c.height*this.relYPos;
+    var offset = c.width*this.relSize;
 
     var offsets = [
       [0,-offset],
       [-offset,0],
       [0,offset],
       [offset,0]
-    ]
+    ];
 
-    this.clear()
+    this.clear();
 
     context.fillStyle = "#00000080";
     context.font = "30px Sans";
     context.textBaseline = 'middle';
     context.textAlign = 'center';
-    context.fillText("Wo möchtest du sitzen?",centerX + offset/2,centerY+offset+cardHeight+30)
+    context.fillText("Wo möchtest du sitzen?",centerX + offset/2,centerY+offset+cardHeight+30);
 
     for(var i = 0; i < 4; i++){
       var color;
@@ -346,13 +325,13 @@ class NewGame {
           color = "#00000020"
         }
       }
-      // Fill card holder
-      // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag
+      // Fill card holder;
+      // https://stackoverflow.com/questions/58220590/how-to-blur-a-specific-region-of-a-html5-video-tag;
       context.fillStyle = color;
       this.roundRect(context, centerX+offsets[i][0],
                        centerY+offsets[i][1],
-                       cardWidth,cardHeight, 16, color, false)
-     // Draw Name
+                       cardWidth,cardHeight, 16, color, false);
+     // Draw Name;
      if(this.protagonist == i){
        context.fillStyle = "#688F4E80";
        context.font = "28px Sans Bold";
@@ -363,13 +342,13 @@ class NewGame {
      }
      var name = "Freier Platz"
      if(this.names[i]!=null){
-       name = this.names[i]
+       name = this.names[i];
      }
      context.textBaseline = 'middle';
      context.textAlign = 'center';
-     context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1])
+     context.fillText(name,centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+offsets[i][1]);
      if(i==0){
-       context.fillText("Start Spieler",centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+30+offsets[i][1])
+       context.fillText("Start Spieler",centerX+cardWidth/2+offsets[i][0],centerY+cardHeight/2+30+offsets[i][1]);
      }
     }
   }
@@ -411,20 +390,20 @@ class NewGame {
 
   isClicked(x,y) {
     var c = document.getElementById("gameField");
-    var context = c.getContext('2d')
+    var context = c.getContext('2d');
 
-    var centerX = c.width*this.relXPos
-    var centerY = c.height*this.relYPos
-    var offset = c.width*this.relSize
-    var outlineWidth=4
+    var centerX = c.width*this.relXPos;
+    var centerY = c.height*this.relYPos;
+    var offset = c.width*this.relSize;
+    var outlineWidth=4;
 
-    var textOffset=10
+    var textOffset=10;
     var offsets = [
       [0,-offset],
       [-offset,0],
       [0,offset],
       [offset,0]
-    ]
+    ];
 
     for(var i = 0; i < 4; i++){
       if(centerX+offsets[i][0] <= x && centerX+offsets[i][0]+cardWidth >= x &&
@@ -432,7 +411,7 @@ class NewGame {
           return i;
         }
     }
-    return null
+    return null;
   }
 
 }
@@ -440,16 +419,16 @@ class NewGame {
 
 class Card{
   constructor(index){
-    this.index = index
-    this.x = 0
-    this.y = 0
-    this.borderSize=1
+    this.index = index;
+    this.x = 0;
+    this.y = 0;
+    this.borderSize=1;
 
-    this.width = cardWidth
-    this.height = cardHeight
+    this.width = cardWidth;
+    this.height = cardHeight;
 
-    this.image = cardImages[index]
-    this.loaded = false
+    this.image = cardImages[index];
+    this.loaded = false;
   }
 
 
@@ -480,147 +459,142 @@ class Card{
     }
 
   isClicked(x,y) {
-    return this.x <= x && this.x + this.width >= x &&  this.y <= y && this.y + this.height >= y
+    return this.x <= x && this.x + this.width >= x &&  this.y <= y && this.y + this.height >= y;
   }
 
 }
 
+function sortNumber(a, b) {
+  return a - b;
+}
+
+
 class Game{
   constructor(){
-    this.table = new Table(0)
-    this.player = new Player(this,0)
-    this.newGame = new NewGame()
-    this.room_name=null
-    this.id=null
-    this.player_ids=null
-    this.turn=3
-    this.finished=false
+    this.table = new Table(0);
+    this.player = new Player(this,0);
+    this.newGame = new NewGame();
+    this.room_name=null;
+    this.id=null;
+    this.player_ids=null;
+    this.turn=3;
+    this.finished=false;
   }
 
   updatePlayerCards(cards){
-    cards.sort()
-    this.player.cards = []
+    cards.sort(sortNumber);
+    this.player.cards = [];
     for(var i = 0; i < cards.length; i++){
-      this.player.cards.push(new Card(cards[i]-1))
+      this.player.cards.push(new Card(cards[i]-1));
     }
-    this.player.draw()
+    this.player.draw();
   }
 
   clicked(x,y) {
     if(!this.finished){
-      console.log("Not finished")
-      var cardIndex = this.player.clicked(x,y)
+      var cardIndex = this.player.clicked(x,y);
       if(cardIndex != null){
         $.getJSON("../api/?action=play_card&card_num="+(this.player.cards[cardIndex].index+1),
-          function (data) {
-            console.log("Play",data)
-          }
-        )
-        this.table.cards[this.turn] = this.player.cards[cardIndex]
-        this.player.cards.splice(cardIndex,1)
-        this.player.draw()
+          function (data) {}
+        );
+        this.table.cards[this.turn] = this.player.cards[cardIndex];
+        this.player.cards.splice(cardIndex,1);
+        this.player.draw();
       }
 
-      console.log("claiming")
-      console.log(this.table.isFull(), this.table.isClicked(x,y))
       if(this.table.isFull() && this.table.isClicked(x,y)){
         for(var i = 0; i < 4; i++){
-          console.log("Table Cards:", this.table.cards[i])
-          this.player.claimed_cards.push(this.table.cards[i].index)
-          this.table.cards[i] == null
+          this.player.claimed_cards.push(this.table.cards[i].index);
+          this.table.cards[i] == null;
         }
         $.getJSON("../api/?action=claim",
-          function (data) {
-            console.log("Claimed",data)
-          }
-        )
+          function (data) {}
+        );
       }
     }
     else{
-      var loc = this.newGame.isClicked(x,y)
-      console.log("loc",loc)
+      var loc = this.newGame.isClicked(x,y);
       if(loc != null){
-        console.log("api, sit")
         $.getJSON("../api/?action=sit&position="+loc,
-          function (data) {
-            console.log("Sit",data)
-          }
-        )
+          function (data) {}
+        );
       }
     }
   }
 }
 
 function doPolling(game){
-  $.getJSON("../api/?action=game_state",
-      function(data) {
-        console.log("GAME POLL:", data)
-        if(data.error==-1){
-          game.table.turn = data.game.turn
-          game.room_name = data.game.room_name
-          game.id=data.game.id
-          game.finished=data.game.finished
+  try{
+    $.getJSON("../api/?action=game_state",
+        function(data) {
+          console.log(data);
+          if(data.error==-1){
+            game.table.turn = data.game.turn;
+            game.room_name = data.game.room_name;
+            game.id=data.game.id;
+            game.finished=data.game.finished;
 
-          game.player_ids = []
-          game.table.names = []
-          game.table.positions = [0,0,0,0]
-          for(var i = 0; i < 4; i++){
-              if(data.players[i] != null){
-                game.player_ids.push(data.players[i].id)
-                game.table.names.push(data.players[i].name)
-                game.table.positions[data.players[i].position]=i
-              }
-          }
-
-          if(!game.finished){
+            game.player_ids = [];
+            game.table.names = [];
+            game.table.positions = [0,0,0,0];
             for(var i = 0; i < 4; i++){
-              if(data.players[i].last_card!= null){
-                game.table.cards[i] = new Card(Number(data.players[i].last_card-1))
-              }
-              else{
-                game.table.cards[i] = null
-              }
-            }
-            //console.log("Game Table",game.table)
-            game.table.draw()
-
-            game.player.id = Number(data.protagonist)
-            game.table.protagonist = game.player_ids.indexOf(game.player.id)
-            var index = game.player_ids.indexOf(game.player.id)
-            console.log(game.player_ids,game.player.id, index)
-            if(index != -1){
-              game.updatePlayerCards(data.players[index].cards)
-            }
-            else{
-              game.updatePlayerCards([])
+                if(data.players[i] != null){
+                  game.player_ids.push(data.players[i].id);
+                  game.table.names.push(data.players[i].name);
+                  game.table.positions[data.players[i].position]=i;
+                }
             }
 
-          }
-          else{
-            game.player.id = Number(data.protagonist)
-            var index = game.player_ids.indexOf(game.player.id)
-            console.log(game.player_ids,game.player.id, index)
-            if(index != -1){
-              game.updatePlayerCards(data.players[index].claimed)
-            }
-            else{
-              game.updatePlayerCards([])
-            }
-            game.newGame.names = [null, null, null]
-
-            for(var i = 0; i < 4; i++){
-              if(data.players[i]!=null && data.players[i].ready){
-                game.newGame.names[data.players[i].position] = data.players[i].name
-                if(i==index){
-                  game.newGame.protagonist = data.players[i].position
+            if(!game.finished){
+              for(var i = 0; i < 4; i++){
+                if(data.players[i].last_card!= null){
+                  game.table.cards[i] = new Card(Number(data.players[i].last_card-1));
+                }
+                else{
+                  game.table.cards[i] = null;
                 }
               }
+              game.table.draw();
+
+              game.player.id = Number(data.protagonist);
+              game.table.protagonist = game.player_ids.indexOf(game.player.id);
+              var index = game.player_ids.indexOf(game.player.id);
+              if(index != -1){
+                game.updatePlayerCards(data.players[index].cards);
+              }
+              else{
+                game.updatePlayerCards([]);
+              }
+
             }
-            game.newGame.draw()
+            else{
+              game.player.id = Number(data.protagonist);
+              var index = game.player_ids.indexOf(game.player.id);
+              if(index != -1){
+                game.updatePlayerCards(data.players[index].claimed);
+              }
+              else{
+                game.updatePlayerCards([]);
+              }
+              game.newGame.names = [null, null, null];
+
+              for(var i = 0; i < 4; i++){
+                if(data.players[i]!=null && data.players[i].ready){
+                  game.newGame.names[data.players[i].position] = data.players[i].name;
+                  if(i==index){
+                    game.newGame.protagonist = data.players[i].position;
+                  }
+                }
+              }
+              game.newGame.draw();
+            }
           }
-        }
-        setTimeout(function(){doPolling(game)},500);
-   });
+     });
+   }
+   catch (e){
+     console.log(e);
+   }
+   setTimeout(function(){doPolling(game)},500);
 }
 
 // const supports_backdrop_filter = (function() {
@@ -630,7 +604,7 @@ function doPolling(game){
 //     (document.documentMode === undefined || document.documentMode > 9);
 // })();
 
-// // unsupporting browsers 
+// // unsupporting browsers;
 // if( !supports_backdrop_filter ) {
 //   ctx.filter = 'blur(' + spread + 'px)';
 
@@ -654,15 +628,15 @@ function doPolling(game){
 //   ctx.drawImage(
 //     vid,
 //     (s_x - offset) / ratio_x, (s_y - offset) / ratio_y, output_w  / ratio_x, output_h / ratio_y,
-//     -offset, -offset, output_w, output_h 
+//     -offset, -offset, output_w, output_h;
 //   );
 // }
 
 
 function main(){
 
-    var game = new Game()
-    doPolling(game)
+    var game = new Game();
+    doPolling(game);
 
     var elem = document.getElementById('gameField'),
         elemLeft = elem.offsetLeft,
@@ -678,7 +652,7 @@ function main(){
 
         var x =(event.clientX-rect.left)*c.width/rect.width,
             y = (event.clientY-rect.top)*c.height/rect.height;
-        game.clicked(x,y)
+        game.clicked(x,y);
     }, false);
 
 }
