@@ -8,6 +8,10 @@ html {
 	height: 100%
 }
 
+* {
+  outline: none;
+}
+
 iframe {
         position: absolute;
         top: 0px;
@@ -105,10 +109,6 @@ a {
   border-radius: 8px;
 }
 
-* {
-  outline: none;
-}
-
 .scondarybutton {
   background-color: #4C50AF; /* Green */
   border: none;
@@ -120,6 +120,7 @@ a {
   display: inline-block;
   font-size: 16px;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 
