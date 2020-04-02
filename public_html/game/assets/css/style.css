@@ -97,6 +97,16 @@ a {
   display: inline-block;
   font-size: 16px;
   border-radius: 8px;
+  cursor: pointer;
+}
+
+.input {
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+* {
+  outline: none;
 }
 
 /*#gameField {
