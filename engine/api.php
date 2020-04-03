@@ -295,7 +295,9 @@
 
 				case 'delete':
 					$this->refreshGame();
+					$GLOBALS["db"]->query("INSERT INTO old_game SELECT * FROM game WHERE create_date < (UNIX_TIMESTAMP() - 16000)");
 					$GLOBALS["db"]->query("DELETE FROM game WHERE create_date < (UNIX_TIMESTAMP() - 16000)");
+					$GLOBALS["db"]->query("INSERT INTO old_player SELECT * FROM player WHERE create_date < (UNIX_TIMESTAMP() - 16000)");
 					$GLOBALS["db"]->query("DELETE FROM player WHERE create_date < (UNIX_TIMESTAMP() - 16000)");
 					break;
 
